@@ -3,9 +3,11 @@ import 'reset-css'; // reset.css 가져오기
 
 const GlobalStyle = createGlobalStyle`
   body {
+    min-width: 1024px;
     font-family: Arial, sans-serif;
     line-height: 1.6;
-    background-color: #f5f5f5;
+    background-color: #FFAD32;
+    height: 100%;
   }
 
   a {
