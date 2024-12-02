@@ -20,6 +20,11 @@ const KakaoMap = () => {
   const [currentMarker, setCurrentMarker] = useState(null); // 내 현재 위치 마커
   const [places, setPlaces] = useState([]);
   const [keyword, setKeyword] = useState('');
+  // const [useCurrentMap, setUseCurrentMap] = useState(false); // "현 지도 내 장소검색" 체크 여부
+  const [center, setCenter] = useState({
+    lat: 33.450701,
+    lng: 126.570667,
+  }); // 중심좌표 관리
 
   useEffect(() => {
     if (!loading && !error) {
@@ -37,6 +42,16 @@ const KakaoMap = () => {
         zIndex: 1,
       });
       setInfowindow(infowindowInstance);
+
+      // 지도 중심 변경 이벤트 리스너
+      window.kakao.maps.event.addListener(mapInstance, 'center_changed', () => {
+        const newCenter = mapInstance.getCenter();
+        // 중심 좌표 업데이트
+        setCenter({
+          lat: newCenter.getLat(),
+          lng: newCenter.getLng(),
+        });
+      });
 
       // 클릭 마커 설정
       const markerInstance = new window.kakao.maps.Marker({
@@ -101,7 +116,7 @@ const KakaoMap = () => {
           position: center,
           image: new window.kakao.maps.MarkerImage(
             '/mylocation.svg',
-            new window.kakao.maps.Size(40, 40),
+            new window.kakao.maps.Size(20, 20),
             { offset: new window.kakao.maps.Point(20, 20) },
           ),
         });
@@ -113,16 +128,17 @@ const KakaoMap = () => {
     }
   }, [location, map, currentMarker]);
 
-  const searchPlaces = () => {
+  const searchPlaces = (useCenter = false) => {
     if (!keyword.trim()) {
       alert('키워드를 입력해주세요!');
       return;
     }
 
     const ps = new window.kakao.maps.services.Places();
+    const searchRadius = useCenter ? 5000 : 20000; // "현 지도 내 장소검색" 체크되면 5km(5000m)
 
     if (location) {
-      const { lat, lng } = location;
+      const { lat, lng } = useCenter ? center : location;
 
       ps.keywordSearch(
         keyword,
@@ -138,7 +154,7 @@ const KakaoMap = () => {
         },
         {
           location: new window.kakao.maps.LatLng(lat, lng),
-          radius: 20000,
+          radius: searchRadius,
         },
       );
     } else {
@@ -232,6 +248,23 @@ const KakaoMap = () => {
             검색
           </button>
         </div>
+
+        {keyword.trim() && (
+          <div>
+            <button
+              onClick={() => searchPlaces(true)}
+              style={{
+                width: '100%',
+                padding: '10px',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+              }}
+            >
+              현 지도 내 검색
+            </button>
+          </div>
+        )}
 
         <ul style={{ listStyle: 'none', padding: 0, marginTop: '10px' }}>
           {places.map((place, index) => (
