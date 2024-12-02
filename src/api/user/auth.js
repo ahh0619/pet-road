@@ -1,4 +1,5 @@
 import { supabase } from '../supabase/supabase';
+import defaultProfileImagePath from '/defaultProfile.png?url';
 
 export const signUp = async (newAuthUser) => {
   const doesUserExist = await fetchUserInfoByUserName(newAuthUser.userName);
@@ -11,6 +12,7 @@ export const signUp = async (newAuthUser) => {
   await addUserInfo({
     id: user.id,
     user_name: newAuthUser.userName,
+    profile_image: defaultProfileImagePath,
   });
 };
 
