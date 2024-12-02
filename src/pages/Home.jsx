@@ -1,5 +1,11 @@
+import KakaoMap from '../components/home/KakaoMap';
+
 const Home = () => {
-  return <div>Home</div>;
+  return (
+    <div>
+      <KakaoMap />
+    </div>
+  );
 };
 
 export default Home;
