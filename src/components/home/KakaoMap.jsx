@@ -1,13 +1,45 @@
 import { useEffect } from 'react';
 import { useKakaoLoader } from 'react-kakao-maps-sdk';
-import mapStore from '../../stores/mapStore';
+import useMapStore from '../../stores/mapStore';
+import useCurrentLocation from '../../hooks/useCurrentLocation';
+import MapControls from './MapControls';
 
 const KakaoMap = () => {
-  const { setMap } = mapStore(); // Zustand의 상태 업데이트 함수 가져오기
+  const { map, setMap } = useMapStore(); // Zustand의 상태 업데이트 함수 가져오기
   const [loading, error] = useKakaoLoader({
     appkey: import.meta.env.VITE_REACT_APP_KAKAOMAP_KEY,
     libraries: ['clusterer', 'drawing', 'services'],
   });
+  const location = useCurrentLocation(); //사용자 현재 위치 정보 받아옴
+
+  const displayMarker = (locPosition, markerImagePath = null) => {
+    if (!map) return;
+
+    const markerImage = new window.kakao.maps.MarkerImage(
+      markerImagePath,
+      new window.kakao.maps.Size(24, 24),
+    );
+
+    const marker = new window.kakao.maps.Marker({
+      map: map,
+      position: locPosition,
+      image: markerImage,
+    });
+    marker.setMap(map);
+  };
+
+  useEffect(() => {
+    if (!loading && map) {
+      const locPosition = new window.kakao.maps.LatLng(
+        location.lat,
+        location.lng,
+      );
+
+      displayMarker(locPosition, '/mylocation.svg');
+
+      map.setCenter(locPosition);
+    }
+  }, [loading, map, location]);
 
   useEffect(() => {
     if (!loading && !error) {
@@ -24,7 +56,11 @@ const KakaoMap = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error loading Kakao Map</div>;
 
-  return <div id="map" style={{ width: '100%', height: '500px' }}></div>;
+  return (
+    <div id="map" style={{ width: '100%', height: '100vh' }}>
+      <MapControls location={location} />
+    </div>
+  );
 };
 
 export default KakaoMap;
