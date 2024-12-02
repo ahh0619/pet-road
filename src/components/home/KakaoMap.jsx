@@ -192,38 +192,111 @@ const KakaoMap = () => {
   if (error) return <div>Error loading Kakao Map</div>;
 
   return (
-    <div style={{ position: 'relative', height: '100vh', width: '100%' }}>
-      {/* 지도 */}
-      <div id="map" style={{ width: '100%', height: '100%' }}></div>
-
-      {/* 지도 컨트롤러 */}
-      <MapControls location={location} />
-
-      {/* 검색 UI */}
+    <div style={{ display: 'flex', height: '100vh', width: '100%' }}>
+      {/* 검색 결과 리스트 */}
       <div
         style={{
-          position: 'absolute',
-          top: '10px',
-          left: '10px',
-          zIndex: 100,
-          backgroundColor: 'white',
+          width: '300px',
           padding: '10px',
-          boxShadow: 'rgba(0, 0, 0, 0.1) 0px 4px 6px',
+          overflowY: 'auto',
+          borderRight: '1px solid #ddd',
+          backgroundColor: '#f9f9f9',
         }}
       >
-        <input
-          type="text"
-          placeholder="검색 키워드"
-          value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
-          style={{ width: '200px', padding: '5px' }}
-        />
-        <button
-          onClick={searchPlaces}
-          style={{ marginLeft: '5px', padding: '5px' }}
+        <div>
+          <input
+            type="text"
+            placeholder="검색 키워드"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '10px',
+              marginBottom: '10px',
+              border: '1px solid #ccc',
+              borderRadius: '4px',
+            }}
+          />
+          <button
+            onClick={searchPlaces}
+            style={{
+              width: '100%',
+              padding: '10px',
+              backgroundColor: '#007bff',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+            }}
+          >
+            검색
+          </button>
+        </div>
+
+        <ul style={{ listStyle: 'none', padding: 0, marginTop: '10px' }}>
+          {places.map((place, index) => (
+            <li
+              key={index}
+              style={{
+                padding: '10px',
+                borderBottom: '1px solid #ddd',
+                cursor: 'pointer',
+                backgroundColor: '#fff',
+              }}
+              onClick={() => {
+                const marker = markers[index];
+                infowindow.setContent(`
+                  <div style="padding:10px; font-size:14px;">
+                    <strong>${place.place_name}</strong><br/>
+                    ${place.road_address_name || place.address_name}<br/>
+                    ${place.phone ? `전화번호: ${place.phone}` : ''}
+                  </div>
+                `);
+                infowindow.open(map, marker);
+                map.panTo(marker.getPosition());
+              }}
+            >
+              <strong>{place.place_name}</strong>
+              <br />
+              {place.road_address_name || place.address_name}
+              <br />
+              {place.phone}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* 지도 */}
+      <div style={{ position: 'relative', flex: 1 }}>
+        <div id="map" style={{ width: '100%', height: '100%' }}></div>
+
+        {/* 지도 컨트롤러 */}
+        <MapControls location={location} />
+
+        {/* 클릭한 위치 정보 */}
+        <div
+          id="clickLatlng"
+          style={{
+            position: 'absolute',
+            bottom: '10px',
+            left: '10px',
+            zIndex: 100,
+            backgroundColor: 'white',
+            padding: '10px',
+            boxShadow: 'rgba(0, 0, 0, 0.1) 0px 4px 6px',
+          }}
         >
-          검색
-        </button>
+          {clickPosition ? (
+            <p>
+              <strong>주소</strong>: {address || '정보 없음'}
+              <br />
+              <strong>위도</strong>: {clickPosition.lat}, <strong>경도</strong>:{' '}
+              {clickPosition.lng}
+            </p>
+          ) : (
+            <p>지도를 클릭하여 위치를 선택하세요.</p>
+          )}
+        </div>
       </div>
     </div>
   );
