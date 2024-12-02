@@ -1,4 +1,4 @@
-import useMapStore from '../../stores/mapStore';
+import useMapStore from '../../stores/useMapStore';
 import styled from 'styled-components';
 // 전체 컨트롤러를 감싸는 StyledController
 const StyledController = styled.div`

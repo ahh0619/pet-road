@@ -1,68 +1,25 @@
 import { useEffect, useState } from 'react';
 import { useKakaoLoader } from 'react-kakao-maps-sdk';
-import useCurrentLocation from './../../hooks/useCurrentLocation';
+import MapControls from './MapControls'; // MapControls 컴포넌트
+import useCurrentLocation from '../../hooks/useCurrentLocation'; // useCurrentLocation 훅
+import useMapStore from '../../stores/useMapStore'; // 변경된 Zustand 스토어
+
 const KakaoMap = () => {
+  const location = useCurrentLocation(); // 현재 위치 가져오기
+  const { map, setMap } = useMapStore(); // Zustand에서 map 상태 가져오기 및 설정
   const [loading, error] = useKakaoLoader({
     appkey: import.meta.env.VITE_REACT_APP_KAKAOMAP_KEY,
     libraries: ['clusterer', 'drawing', 'services'],
   });
-  const location = useCurrentLocation(); //사용자 현재 위치 정보 받아옴
 
-  const displayMarker = (locPosition, markerImagePath = null) => {
-    if (!map) return;
-
-    const markerImage = new window.kakao.maps.MarkerImage(
-      markerImagePath,
-      new window.kakao.maps.Size(24, 24),
-    );
-
-    const marker = new window.kakao.maps.Marker({
-      map: map,
-      position: locPosition,
-      image: markerImage,
-    });
-    marker.setMap(map);
-  };
-
-  useEffect(() => {
-    if (!loading && map) {
-      const locPosition = new window.kakao.maps.LatLng(
-        location.lat,
-        location.lng,
-      );
-
-      displayMarker(locPosition, '/mylocation.svg');
-
-      map.setCenter(locPosition);
-    }
-  }, [loading, map, location]);
-
-  const [map, setMap] = useState(null);
   const [markers, setMarkers] = useState([]);
   const [infowindow, setInfowindow] = useState(null);
-  const [currentPosition, setCurrentPosition] = useState(null);
   const [clickPosition, setClickPosition] = useState(null);
-  const [address, setAddress] = useState(''); // 클릭한 위치의 주소 저장
+  const [address, setAddress] = useState('');
   const [clickMarker, setClickMarker] = useState(null);
   const [currentMarker, setCurrentMarker] = useState(null); // 내 현재 위치 마커
   const [places, setPlaces] = useState([]);
   const [keyword, setKeyword] = useState('');
-
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setCurrentPosition({ lat: latitude, lng: longitude });
-        },
-        (error) => {
-          console.error('Error getting current position:', error);
-        },
-      );
-    } else {
-      console.error('Geolocation is not supported by this browser.');
-    }
-  }, []);
 
   useEffect(() => {
     if (!loading && !error) {
@@ -130,11 +87,11 @@ const KakaoMap = () => {
         },
       );
     }
-  }, [loading, error]);
+  }, [loading, error, setMap]);
 
   useEffect(() => {
-    if (currentPosition && map) {
-      const { lat, lng } = currentPosition;
+    if (location && map) {
+      const { lat, lng } = location;
       const center = new window.kakao.maps.LatLng(lat, lng);
       map.setCenter(center);
 
@@ -154,7 +111,7 @@ const KakaoMap = () => {
         currentMarker.setPosition(center);
       }
     }
-  }, [currentPosition, map, currentMarker]);
+  }, [location, map, currentMarker]);
 
   const searchPlaces = () => {
     if (!keyword.trim()) {
@@ -164,8 +121,8 @@ const KakaoMap = () => {
 
     const ps = new window.kakao.maps.services.Places();
 
-    if (currentPosition) {
-      const { lat, lng } = currentPosition;
+    if (location) {
+      const { lat, lng } = location;
 
       ps.keywordSearch(
         keyword,
@@ -235,77 +192,38 @@ const KakaoMap = () => {
   if (error) return <div>Error loading Kakao Map</div>;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-      <div style={{ display: 'flex', flex: 1 }}>
-        {/* 검색 UI */}
-        <div
-          style={{
-            width: '300px',
-            padding: '10px',
-            overflowY: 'scroll',
-            height: '100%',
-          }}
+    <div style={{ position: 'relative', height: '100vh', width: '100%' }}>
+      {/* 지도 */}
+      <div id="map" style={{ width: '100%', height: '100%' }}></div>
+
+      {/* 지도 컨트롤러 */}
+      <MapControls location={location} />
+
+      {/* 검색 UI */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '10px',
+          left: '10px',
+          zIndex: 100,
+          backgroundColor: 'white',
+          padding: '10px',
+          boxShadow: 'rgba(0, 0, 0, 0.1) 0px 4px 6px',
+        }}
+      >
+        <input
+          type="text"
+          placeholder="검색 키워드"
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+          style={{ width: '200px', padding: '5px' }}
+        />
+        <button
+          onClick={searchPlaces}
+          style={{ marginLeft: '5px', padding: '5px' }}
         >
-          <input
-            type="text"
-            placeholder="검색 키워드"
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-            style={{ width: '100%', padding: '5px' }}
-          />
-          <button
-            onClick={searchPlaces}
-            style={{ width: '100%', marginTop: '10px', padding: '5px' }}
-          >
-            검색
-          </button>
-
-          <ul style={{ listStyle: 'none', padding: 0, marginTop: '10px' }}>
-            {places.map((place, index) => (
-              <li
-                key={index}
-                style={{
-                  padding: '10px',
-                  borderBottom: '1px solid #ddd',
-                  cursor: 'pointer',
-                }}
-                onClick={() => {
-                  const marker = markers[index];
-                  infowindow.setContent(`
-                    <div style="padding:10px; font-size:14px;">
-                      <strong>${place.place_name}</strong><br/>
-                      ${place.road_address_name || place.address_name}<br/>
-                      ${place.phone ? `전화번호: ${place.phone}` : ''}
-                    </div>
-                  `);
-                  infowindow.open(map, marker);
-                  map.panTo(marker.getPosition());
-                }}
-              >
-                <strong>{place.place_name}</strong>
-                <br />
-                {place.road_address_name || place.address_name}
-                <br />
-                {place.phone}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* 지도 */}
-        <div id="map" style={{ flex: 1, height: '100%' }}></div>
-      </div>
-
-      {/* 클릭한 위치 정보 */}
-      <div id="clickLatlng" style={{ padding: '10px', textAlign: 'center' }}>
-        {clickPosition ? (
-          <p>
-            <strong>주소</strong>: {address || '정보 없음'}
-            <br />
-          </p>
-        ) : (
-          <p>지도를 클릭하여 위치를 선택하세요.</p>
-        )}
+          검색
+        </button>
       </div>
     </div>
   );
