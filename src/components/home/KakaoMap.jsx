@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useKakaoLoader } from 'react-kakao-maps-sdk';
-
+import useCurrentLocation from './../../hooks/useCurrentLocation';
 const KakaoMap = () => {
   const [loading, error] = useKakaoLoader({
     appkey: import.meta.env.VITE_REACT_APP_KAKAOMAP_KEY,
