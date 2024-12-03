@@ -59,24 +59,43 @@ const MainContent = ({ setShowDetail, setSelectedPlaceId }) => {
     const center = map.getCenter();
     const keyword = selectedCategory === 'CE7' ? '애견 카페' : '애견 숙박';
 
-    ps.keywordSearch(
-      keyword,
-      (data, status) => {
-        if (status === window.kakao.maps.services.Status.OK) {
-          setPlaces(data);
-          displayPlaces(data);
-        } else {
-          alert('주변에 해당 시설이 존재하지 않아요.');
-        }
-      },
-      {
-        location: new window.kakao.maps.LatLng(
-          center.getLat(),
-          center.getLng(),
-        ),
-        radius: 20000,
-      },
-    );
+    const allResults = [];
+    const maxPages = 3; // Kakao API가 지원하는 최대 페이지 수
+    let currentPage = 1;
+
+    const fetchResults = (page) => {
+      ps.keywordSearch(
+        keyword,
+        (data, status, pagination) => {
+          if (status === window.kakao.maps.services.Status.OK) {
+            allResults.push(...data);
+
+            // 다음 페이지가 있고, 최대 페이지를 넘지 않았으면 추가 요청
+            if (pagination.hasNextPage && page < maxPages) {
+              fetchResults(page + 1);
+            } else {
+              setPlaces(allResults);
+              displayPlaces(allResults);
+            }
+          } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
+            alert('주변에 해당 시설이 존재하지 않아요.');
+          } else {
+            alert('검색 중 오류가 발생했습니다.');
+          }
+        },
+        {
+          location: new window.kakao.maps.LatLng(
+            center.getLat(),
+            center.getLng(),
+          ),
+          radius: 20000, // 검색 반경 20km
+          page, // 현재 페이지 번호
+        },
+      );
+    };
+
+    // 첫 번째 페이지부터 검색 시작
+    fetchResults(currentPage);
   };
 
   const displayPlaces = (places) => {
