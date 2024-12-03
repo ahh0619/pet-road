@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import AppRouter from './shared/Router';
 import { supabase } from './api/supabase/supabase';
 import { useEffect } from 'react';
-import useAuthUserStore from './stores/authUserStore';
+import useAuthUserStore from './stores/useAuthUserStore';
 
 const queryClient = new QueryClient();
 
