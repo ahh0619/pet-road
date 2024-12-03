@@ -37,11 +37,11 @@ const MainContentsComponent = () => {
         </SelectWrap>
         {/* 탭 영역 */}
         <SearchTabUl>
-          <SearchTabLi isActive="true">
+          <SearchTabLi $isActive="true">
             <i className="fa-solid fa-hotel"></i>
             <p>숙박</p>
           </SearchTabLi>
-          <SearchTabLi isActive="">
+          <SearchTabLi $isActive="">
             <i className="fa-solid fa-mug-saucer"></i>
             <p>카페</p>
           </SearchTabLi>
@@ -58,11 +58,11 @@ const MainContentsComponent = () => {
             <ListBookmark>
               <HeartIcon
                 className="fa-solid fa-heart"
-                isActive="true"
+                $isActive="true"
               ></HeartIcon>
               <HeartIcon
                 className="fa-regular fa-heart"
-                isActive=""
+                $isActive=""
               ></HeartIcon>
             </ListBookmark>
           </ListLine>
@@ -80,10 +80,10 @@ const MainContentsComponent = () => {
               칠랑고asdfasdfasdasdfasㅁㄴㅇㄹㄹㄴㅇㄹㅁㄴㅇdff
             </TitleP>
             <ListBookmark>
-              <HeartIcon className="fa-solid fa-heart" isActive=""></HeartIcon>
+              <HeartIcon className="fa-solid fa-heart" $isActive=""></HeartIcon>
               <HeartIcon
                 className="fa-regular fa-heart"
-                isActive="true"
+                $isActive="true"
               ></HeartIcon>
             </ListBookmark>
           </ListLine>

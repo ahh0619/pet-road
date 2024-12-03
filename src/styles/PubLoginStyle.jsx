@@ -45,7 +45,7 @@ export const SignDiv = styled.div`
   border-radius: 10px;
   background-color: #fff;
   box-shadow: 8px 8px 15px 0px rgba(60, 6, 6, 0.28);
-  margin-bottom: ${(props) => (props.bottomGap === true ? '80px' : '0px')};
+  margin-bottom: ${(props) => (props.$bottomGap === true ? '80px' : '0px')};
 `;
 
 export const SignTitle = styled.p`
@@ -63,7 +63,7 @@ export const SignTitle = styled.p`
 export const Hr = styled.hr`
   border: 0.1px solid #a9a9a9;
   margin-top: 0px;
-  margin-bottom: ${(props) => (props.bottomGap === 'false' ? '0px' : '30px')};
+  margin-bottom: ${(props) => (props.$bottomGap === 'false' ? '0px' : '30px')};
 `;
 
 export const Input = styled.input`
@@ -71,9 +71,9 @@ export const Input = styled.input`
   border-radius: 5px;
   width: 100%;
   box-sizing: border-box;
-  padding: ${(props) => (props.isMyPage === 'true' ? '10px' : '15px')};
-  margin-bottom: ${(props) => (props.isMyPage === 'true' ? '10px' : '20px')};
-  font-size: ${(props) => (props.isMyPage === 'true' ? '16px' : '20px')};
+  padding: ${(props) => (props.$isMyPage === 'true' ? '10px' : '15px')};
+  margin-bottom: ${(props) => (props.$isMyPage === 'true' ? '10px' : '20px')};
+  font-size: ${(props) => (props.$isMyPage === 'true' ? '16px' : '20px')};
 
   &::placeholder {
     color: #a8a8a8;
@@ -91,8 +91,8 @@ export const SignButton = styled.button`
   width: 100%;
   box-sizing: border-box;
   padding: 12px;
-  margin-bottom: ${(props) => (props.isMyPage === 'true' ? '0px' : '20px')};
-  font-size: ${(props) => (props.isMyPage === 'true' ? '18px' : '25px')};
+  margin-bottom: ${(props) => (props.$isMyPage === 'true' ? '0px' : '20px')};
+  font-size: ${(props) => (props.$isMyPage === 'true' ? '18px' : '25px')};
   background-color: #ff6732;
   color: #fff;
   cursor: pointer;

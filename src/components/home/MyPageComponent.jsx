@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   TitleP,
   MyPageWrap,
@@ -8,7 +7,7 @@ import {
   FileInput,
   FileName,
   FileUploadWrap,
-} from '../../styles/PubMapPageStyle';
+} from '../../styles//KakaoMapStyle';
 import { Input, SignButton } from '../../styles/PubLoginStyle';
 
 const MyPageComponent = () => {
@@ -16,18 +15,18 @@ const MyPageComponent = () => {
     <MyPageWrap>
       <MyPageTitle>
         <MyPageUser>
-          <i class="fa-solid fa-circle-user"></i>
+          <i className="fa-solid fa-circle-user"></i>
         </MyPageUser>
         <TitleP>칠무해 쿠마</TitleP>
       </MyPageTitle>
-      <Input isMyPage="true" type="text" placeholder="닉네임" />
+      <Input $isMyPage="true" type="text" placeholder="닉네임" />
       <TitleP>프로필사진</TitleP>
       <FileUploadWrap>
         <FileLabel htmlFor="file-input">파일 선택</FileLabel>
         <FileInput id="file-input" type="file" accept="image/*, .pdf" />
         <FileName>선택된 파일: </FileName>
       </FileUploadWrap>
-      <SignButton isMyPage="true">수정</SignButton>
+      <SignButton $isMyPage="true">수정</SignButton>
     </MyPageWrap>
   );
 };

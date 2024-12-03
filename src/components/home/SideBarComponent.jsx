@@ -1,19 +1,24 @@
+import { useState } from 'react';
 import {
   SideBar,
   SideBarLogoWrap,
   Tab,
   UserWrap,
+  UserProfileWrap,
 } from '../../styles/KakaoMapStyle';
 import { Hr } from '../../styles/PubLoginStyle';
+import MyPageComponent from './MyPageComponent';
 
 const SideBarComponent = () => {
+  const [isMyPageVisible, setIsMyPageVisible] = useState(false);
+
   return (
     <SideBar>
       <SideBarLogoWrap>
         <img src="/images/map-pet-logo.png" />
       </SideBarLogoWrap>
-      <Hr bottomGap="false" />
-      <Tab selectOn="true">
+      <Hr $bottomGap="false" />
+      <Tab $selectOn="true">
         <i className="fa-solid fa-location-dot"></i>
         <br />
         <p>지도 홈</p>
@@ -23,8 +28,12 @@ const SideBarComponent = () => {
         <br />
         <p>북마크</p>
       </Tab>
-      <UserWrap>
+
+      <UserWrap onClick={() => setIsMyPageVisible(!isMyPageVisible)}>
         <i className="fa-solid fa-circle-user"></i>
+        <UserProfileWrap>
+          {isMyPageVisible && <MyPageComponent />}
+        </UserProfileWrap>
       </UserWrap>
     </SideBar>
   );

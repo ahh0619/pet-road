@@ -12,7 +12,7 @@ import {
   SerchListWrap,
   SerchTabWrap,
   SearchButton,
-  SideBar,
+  // SideBar,
   ListLine,
   TitleP,
   ListBookmark,
@@ -221,7 +221,7 @@ const KakaoMap = () => {
 
   return (
     <div style={{ display: 'flex', height: '100vh', width: '100%' }}>
-      <SideBar />
+      {/* <SideBar /> */}
       <SerchListWrap>
         {/* 검색 및 필터 UI */}
         <SerchTabWrap>
@@ -236,14 +236,14 @@ const KakaoMap = () => {
           </SelectWrap>
           <SearchTabUl>
             <SearchTabLi
-              isActive={selectedCategory === 'CE7' ? 'true' : 'false'}
+              $isActive={selectedCategory === 'CE7' ? 'true' : 'false'}
               onClick={() => setSelectedCategory('CE7')} // 선택된 카테고리 업데이트
             >
               <i className="fa-solid fa-mug-saucer"></i>
               <p>카페</p>
             </SearchTabLi>
             <SearchTabLi
-              isActive={selectedCategory === 'AD5' ? 'true' : 'false'}
+              $isActive={selectedCategory === 'AD5' ? 'true' : 'false'}
               onClick={() => setSelectedCategory('AD5')} // 선택된 카테고리 업데이트
             >
               <i className="fa-solid fa-hotel"></i>
