@@ -5,7 +5,7 @@ import { Hr, SignDiv, SignTitle } from '../styles/PubLoginStyle';
 const SignUp = () => {
   return (
     <LoginSignUpUI>
-      <SignDiv bottomGap="true">
+      <SignDiv $bottomGap="true">
         <SignTitle>회원가입</SignTitle>
         <Hr />
         <SignUpForm />

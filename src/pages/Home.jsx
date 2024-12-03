@@ -1,4 +1,5 @@
 import KakaoMap from '../components/home/KakaoMap';
+
 import MainContent from '../components/home/MainContent';
 import SideBarComponent from '../components/home/SideBarComponent';
 import DetailComponent from '../components/home/DetailComponent';
@@ -27,6 +28,7 @@ const Home = () => {
         showBookmark={showBookmark}
         setShowBookmark={setShowBookmark}
       />
+
       <KakaoMap />
     </>
   );
