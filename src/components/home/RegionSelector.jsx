@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { SelectWrap, SearchSelect } from '../../styles/KakaoMapStyle';
+import axios from 'axios';
 
 const RegionSelector = ({
   onRegionChange,
@@ -13,10 +14,16 @@ const RegionSelector = ({
 
   // JSON 데이터 로드
   useEffect(() => {
-    fetch('/data/korea.json') // JSON 파일 경로
-      .then((res) => res.json())
-      .then((json) => setData(json))
-      .catch((err) => console.error('행정구역 데이터 로드 실패:', err));
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('/data/korea.json'); // JSON 파일 경로
+        setData(response.data);
+      } catch (error) {
+        console.error('행정구역 데이터 로드 실패:', error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   // 시/도 변경 핸들러

@@ -250,9 +250,9 @@ const KakaoMap = () => {
 
   if (loading) return <div>Loading...</div>;
   if (error) {
-    console.error("Error loading Kakao Map:", error);
-    return <div>Error loading Kakao Map</div>
-  };
+    console.error('Error loading Kakao Map:', error);
+    return <div>Error loading Kakao Map</div>;
+  }
 
   return (
     <div style={{ display: 'flex', height: '100vh', width: '100%' }}>
@@ -271,18 +271,18 @@ const KakaoMap = () => {
           </SelectWrap>
           <SearchTabUl>
             <SearchTabLi
-              isActive={selectedCategory === 'AD5' ? 'true' : 'false'}
-              onClick={() => setSelectedCategory('AD5')} // 선택된 카테고리 업데이트
-            >
-              <i className="fa-solid fa-hotel"></i>
-              <p>숙박</p>
-            </SearchTabLi>
-            <SearchTabLi
               isActive={selectedCategory === 'CE7' ? 'true' : 'false'}
               onClick={() => setSelectedCategory('CE7')} // 선택된 카테고리 업데이트
             >
               <i className="fa-solid fa-mug-saucer"></i>
               <p>카페</p>
+            </SearchTabLi>
+            <SearchTabLi
+              isActive={selectedCategory === 'AD5' ? 'true' : 'false'}
+              onClick={() => setSelectedCategory('AD5')} // 선택된 카테고리 업데이트
+            >
+              <i className="fa-solid fa-hotel"></i>
+              <p>펜션</p>
             </SearchTabLi>
           </SearchTabUl>
         </SerchTabWrap>
