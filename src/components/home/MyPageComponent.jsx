@@ -10,11 +10,12 @@ import {
   FileName,
   FileUploadWrap,
   UserProfileDiv,
+  LogoutBtn,
 } from '../../styles//KakaoMapStyle';
 import { Input, SignButton } from '../../styles/PubLoginStyle';
 import useAuth from '../../hooks/auth/useAuth';
 
-import useProfileUpdate from '../../hooks/useProfile';
+import useProfileUpdate from '../../hooks/useProfileUpdate';
 
 const MyPageComponent = () => {
   const navigate = useNavigate();
@@ -32,6 +33,8 @@ const MyPageComponent = () => {
   const handleSignButtonClick = () => {
     if (authUser) {
       handleProfileUpdate();
+      setNewUserName('');
+      setNewProfileImage('');
     } else {
       navigate('/login');
     }
@@ -41,8 +44,13 @@ const MyPageComponent = () => {
     <MyPageWrap>
       <MyPageTitle>
         <MyPageUser>
-          {/* <i className="fa-solid fa-circle-user"></i> */}
-          <UserProfileDiv></UserProfileDiv>
+          {authUser ? (
+            <UserProfileDiv
+              $backgroundUrl={authUser.profileImage}
+            ></UserProfileDiv>
+          ) : (
+            <i className="fa-solid fa-circle-user"></i>
+          )}
         </MyPageUser>
         <TitleP>
           {authUser?.userName ? `${authUser.userName}` : '로그인해주세요'}
@@ -50,11 +58,13 @@ const MyPageComponent = () => {
       </MyPageTitle>
       {authUser ? (
         <>
-          <div onClick={logout}>로그아웃</div>
+          <LogoutBtn onClick={logout}>
+            <i className="fa-solid fa-arrow-right-from-bracket"></i>
+          </LogoutBtn>
           <Input
             $isMyPage="true"
             type="text"
-            placeholder="닉네임"
+            placeholder={authUser.userName}
             value={newUserName}
             onChange={(e) => setNewUserName(e.target.value)}
           />

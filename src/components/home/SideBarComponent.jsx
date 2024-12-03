@@ -5,9 +5,11 @@ import {
   Tab,
   UserWrap,
   UserProfileWrap,
+  UserProfileDiv,
 } from '../../styles/KakaoMapStyle';
 import { Hr } from '../../styles/PubLoginStyle';
 import MyPageComponent from './MyPageComponent';
+import useAuthUserStore from '../../stores/useAuthUserStore';
 
 const SideBarComponent = ({
   showMain,
@@ -16,6 +18,7 @@ const SideBarComponent = ({
   setShowBookmark,
 }) => {
   const [isMyPageVisible, setIsMyPageVisible] = useState(false);
+  const authUser = useAuthUserStore((state) => state.authUser);
   const handleHomeIcon = () => {
     if (showMain) {
       setShowMain(false);
@@ -51,7 +54,14 @@ const SideBarComponent = ({
       </Tab>
 
       <UserWrap onClick={() => setIsMyPageVisible(!isMyPageVisible)}>
-        <i className="fa-solid fa-circle-user"></i>
+        {authUser ? (
+          <UserProfileDiv
+            $backgroundUrl={authUser.profileImage}
+          ></UserProfileDiv>
+        ) : (
+          <i className="fa-solid fa-circle-user"></i>
+        )}
+
         <UserProfileWrap onClick={(e) => e.stopPropagation()}>
           {isMyPageVisible && <MyPageComponent />}
         </UserProfileWrap>

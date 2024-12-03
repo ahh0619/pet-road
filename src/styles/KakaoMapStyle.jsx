@@ -1,10 +1,29 @@
 import styled from 'styled-components';
+
 export const UserProfileDiv = styled.div`
+  margin: 0 auto;
+  text-align: center;
   width: 34px;
   height: 34px;
+  background-image: url(${(props) => props.$backgroundUrl});
+  background-size: cover;
+  background-position: center;
   border-radius: 50%;
-  background-color: #3498db; /* 원하는 배경색으로 변경 */
+  overflow: hidden;
 `;
+export const LogoutBtn = styled.button`
+  cursor: pointer;
+  position: absolute;
+  top: 21px;
+  right: 10px;
+  border: none;
+  background-color: #fff;
+  i {
+    font-size: 18px;
+    color: #777;
+  }
+`;
+
 export const MypageDiv = styled.div`
   bottom: 20px;
   left: 10%;
@@ -70,10 +89,6 @@ export const UserWrap = styled.div`
   padding-top: 15px;
   padding-bottom: 8px;
   border-top: 1px solid #a9a9a9;
-
-  i {
-    font-size: 34px;
-  }
 `;
 
 export const SerchListWrap = styled.div`
