@@ -12,11 +12,7 @@ const Home = () => {
 
   return (
     <>
-      {showMain && (
-        <MainContent
-          setShowDetail={setShowDetail}
-        />
-      )}
+      {showMain && <MainContent setShowDetail={setShowDetail} />}
       {showBookmark && (
         <MainContent
           setShowDetail={setShowBookmark}
@@ -24,9 +20,7 @@ const Home = () => {
         />
       )}
       {(showMain || showBookmark) && showDetail && (
-        <DetailComponent
-          setShowDetail={setShowDetail}
-        />
+        <DetailComponent setShowDetail={setShowDetail} />
       )}
       <SideBarComponent
         showMain={showMain}
