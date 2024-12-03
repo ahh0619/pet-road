@@ -1,22 +1,12 @@
 import { useEffect, useState } from 'react';
 import { DetailWrap, CloseBtn, ControlMenu } from '../../styles/KakaoMapStyle';
+import LikeComponent from './LikeComponent';
 
 const DetailComponent = ({ selectedPlaceId = '1692043917', setShowDetail }) => {
   const [url, setUrl] = useState('');
-  const [isLiked, setIsLiked] = useState(false);
-  const heartImage = isLiked ? 'heart-on.png' : 'heart-off.png';
 
   const handleCloseBtn = () => {
     setShowDetail(false);
-  };
-
-  const handleLikeBtn = () => {
-    // 좋아요 버튼 눌렀을 때 로직 처리
-    if (isLiked) {
-      setIsLiked(false);
-    } else {
-      setIsLiked(true);
-    }
   };
 
   useEffect(() => {
@@ -32,7 +22,8 @@ const DetailComponent = ({ selectedPlaceId = '1692043917', setShowDetail }) => {
         </span>
       </CloseBtn>
       <ControlMenu>
-        <img src={heartImage} onClick={handleLikeBtn} />{' '}
+        {/*좋아요 버튼*/}
+        <LikeComponent selectedPlaceId={selectedPlaceId}/>
       </ControlMenu>
     </DetailWrap>
   );
