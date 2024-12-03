@@ -18,8 +18,9 @@ import RegionSelector from './RegionSelector';
 import useMapStore from '../../stores/useMapStore';
 import { createInfoWindowContent } from '../../utils/infoWindowUitl';
 import { useEffect } from 'react';
+import usePlaceStore from '../../stores/usePlaceStore';
 
-const MainContent = ({ setShowDetail, setSelectedPlaceId }) => {
+const MainContent = ({ setShowDetail }) => {
   const {
     map,
     markers,
@@ -34,6 +35,7 @@ const MainContent = ({ setShowDetail, setSelectedPlaceId }) => {
     selectedCity,
     setSelectedCity,
   } = useMapStore();
+  const { setSelectedPlace } = usePlaceStore();
 
   const handleRegionChange = ({ region, city }) => {
     if (map && region && city) {
@@ -171,18 +173,17 @@ const MainContent = ({ setShowDetail, setSelectedPlaceId }) => {
                 infowindow.open(map, marker);
                 map.panTo(marker.getPosition());
               }
-              setSelectedPlaceId(place.id);
+              setSelectedPlace(place);
               setShowDetail(true);
             }}
           >
             <ListLine>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <i
-                  className={`fa-solid ${
-                    place.category_name?.includes('카페')
+                  className={`fa-solid ${place.category_name?.includes('카페')
                       ? 'fa-mug-saucer'
                       : 'fa-hotel'
-                  }`}
+                    }`}
                   style={{ color: '#ff6732', marginRight: '8px' }}
                 ></i>
                 <TitleP $isListTitle="true">{place.place_name}</TitleP>
