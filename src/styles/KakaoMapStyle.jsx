@@ -60,6 +60,7 @@ export const UserWrap = styled.div`
 
 export const SerchListWrap = styled.div`
   position: absolute;
+  overflow-y: auto;
   z-index: 9999;
   top: 0px;
   left: 67px;
@@ -76,10 +77,9 @@ export const SerchTabWrap = styled.div`
 export const SelectWrap = styled.div`
   display: flex;
   justify-content: space-between;
+  gap: 5px;
   width: 100%;
   margin-bottom: 5px;
-  border-radius: 5px;
-  border: 1px solid #a9a9a9;
   box-sizing: border-box;
 `;
 
@@ -92,15 +92,18 @@ export const SearchSelect = styled.select`
   width: 50%;
   cursor: pointer;
   box-sizing: border-box;
-
+  border: 1px solid #a9a9a9;
+  border-radius: 5px;
   &:first-of-type {
     border-right: 1px solid #a9a9a9;
   }
 `;
+
 export const SerchInputWrap = styled.div`
   position: relative;
   width: 100%;
 `;
+
 export const SerchInput = styled.input`
   border: 2px solid #ff6732;
   border-radius: 5px;
@@ -138,31 +141,51 @@ export const SearchTabUl = styled.ul`
   font-weight: bold;
   justify-content: center;
   gap: 10px;
+  margin-top: 20px;
 `;
 
 export const SearchTabLi = styled.li`
-  padding: 5px 10px;
+  padding: 8px 15px; /* 버튼 크기 조정 */
   cursor: pointer;
   font-size: 16px;
-  color: ${(props) => (props.isActive === 'true' ? '#ff9011' : '#999')};
-  border: ${(props) =>
-    props.isActive === 'true' ? '1px solid #ffa641' : '1px solid #bababa'};
   border-radius: 30px;
+  border: 1px solid
+    ${(props) => (props.isActive === 'true' ? '#ff6732' : '#bababa')};
+  background-color: ${(props) =>
+    props.isActive === 'true' ? '#fff5ee' : 'transparent'};
+  color: ${(props) => (props.isActive === 'true' ? '#ff6732' : '#999')};
+  display: flex;
+  align-items: center; /* 아이콘과 텍스트 정렬 */
+  gap: 5px; /* 아이콘과 텍스트 간격 */
 
   i {
-    display: inline;
+    color: inherit; /* 상위 색상(color)을 상속 */
+    transition: color 0.2s ease; /* 부드러운 색상 전환 */
   }
 
   p {
-    display: inline;
-    padding-left: 5px;
+    margin: 0;
+    padding: 0;
   }
+
+  &:hover {
+    border-color: #ff6732;
+    background-color: #fff5ee;
+    color: #ff6732;
+
+    i {
+      color: #ff6732; /* 호버 시 아이콘 색상 */
+    }
+  }
+
+  transition: all 0.3s ease; /* 부드러운 전환 효과 */
 `;
 
 export const ListWrap = styled.div`
   overflow-y: auto;
   text-align: left;
   line-height: 1.5;
+  height: calc(100vh - 230px);
 `;
 
 export const ListItem = styled.div`
@@ -253,7 +276,7 @@ export const DetailWrap = styled.div`
     width: 100%;
     height: 6800px;
     border: none;
-    overflow: hidden; 
+    overflow: hidden;
   }
 
   /* 커스텀 스크롤바 스타일 */
@@ -266,10 +289,10 @@ export const DetailWrap = styled.div`
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: #FFAD32; /* 스크롤바 색상 */
+    background-color: #ffad32; /* 스크롤바 색상 */
     border-radius: 10px; /* 스크롤바 모서리 둥글게 */
     border: 2px solid #fff; /* 스크롤바 테두리 */
-    cursor: pointer; 
+    cursor: pointer;
   }
 
   &::-webkit-scrollbar-thumb:hover {
@@ -278,38 +301,38 @@ export const DetailWrap = styled.div`
 `;
 
 export const CloseBtn = styled.div`
-    width: 90px;
-    height: 40px;
-    background-color: #ffffff;
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    z-index: 100;
+  width: 90px;
+  height: 40px;
+  background-color: #ffffff;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  z-index: 100;
 
-    font-size: 30px;
-    text-align: right;
-    padding-right: 10px;
-`
+  font-size: 30px;
+  text-align: right;
+  padding-right: 10px;
+`;
 
 export const ControlMenu = styled.div`
-    width: 390px;
-    height: 60px;
-    background-color: #ffffff;
-    position: absolute;
-    top: 280px; 
-    text-align: right;
-    z-index: 100;
+  width: 390px;
+  height: 60px;
+  background-color: #ffffff;
+  position: absolute;
+  top: 280px;
+  text-align: right;
+  z-index: 100;
 
-    img{
-        width: 35px;
-        margin-top: 15px;
-        margin-right: 15px;
+  img {
+    width: 35px;
+    margin-top: 15px;
+    margin-right: 15px;
 
-        &:hover{
-            cursor: pointer;
-        }
+    &:hover {
+      cursor: pointer;
     }
-`
+  }
+`;
 
 export const MyPageTitle = styled.div`
   display: flex;
@@ -376,4 +399,38 @@ export const FileName = styled.div`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+`;
+
+export const SearchButton = styled.button`
+  margin-top: 10px;
+  margin-left: 30px;
+  margin-bottom: 30px;
+  width: 80%;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #ff6732;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+  &:hover {
+    background-color: #e65d2d; /* Hover 시 색상 약간 어둡게 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Hover 시 그림자 강조 */
+  }
+
+  &:active {
+    background-color: #cc4f26; /* Active 상태 */
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2); /* Active 시 내부 그림자 */
+  }
+
+  &:disabled {
+    background-color: #a8a8a8; /* 비활성화 상태 */
+    cursor: not-allowed;
+    box-shadow: none;
+  }
 `;
