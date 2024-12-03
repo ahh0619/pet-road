@@ -19,7 +19,7 @@ import useMapStore from '../../stores/useMapStore';
 import { createInfoWindowContent } from '../../utils/infoWindowUitl';
 import { useEffect } from 'react';
 
-const MainContent = () => {
+const MainContent = ({ setShowDetail, setSelectedPlaceId }) => {
   const {
     map,
     markers,
@@ -152,6 +152,8 @@ const MainContent = () => {
                 infowindow.open(map, marker);
                 map.panTo(marker.getPosition());
               }
+              setSelectedPlaceId(place.id);
+              setShowDetail(true);
             }}
           >
             <ListLine>

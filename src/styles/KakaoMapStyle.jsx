@@ -30,10 +30,11 @@ export const SideBarLogoWrap = styled.div`
 export const Tab = styled.div`
   padding-top: 20px;
   padding-bottom: 10px;
+  text-align: center;
   cursor: pointer;
-  color: ${(props) => (props.selectOn === 'true' ? '#fff' : '#595959')};
+  color: ${(props) => (props.$selectOn === 'true' ? '#fff' : '#595959')};
   background-color: ${(props) =>
-    props.selectOn === 'true' ? '#ff6732' : '#fff'};
+    props.$selectOn === 'true' ? '#ff6732' : '#fff'};
   i {
     font-size: 25px;
   }
