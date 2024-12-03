@@ -1,12 +1,17 @@
-import useAuthUserStore from '../stores/authUserStore';
+import Detail from '../components/detail/Detail';
+import DetailComponent from '../components/home/DetailComponent';
+import KakaoMap from '../components/home/KakaoMap';
+import MainContentsComponent from '../components/home/MainContentsComponent';
+import SideBarComponent from '../components/home/SideBarComponent';
 
 const Home = () => {
-  const authUser = useAuthUserStore((state) => state.authUser);
   return (
-    <>
-      <div>{authUser?.userName}</div>
-      <div>Home</div>
-    </>
+    <div>
+      <KakaoMap />
+      <SideBarComponent />
+      <MainContentsComponent />
+      <DetailComponent />
+    </div>
   );
 };
 
