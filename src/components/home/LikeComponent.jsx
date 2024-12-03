@@ -5,7 +5,6 @@ import { toast } from 'react-toastify';
 
 function LikeComponent({ selectedPlaceId }) {
     const [isLiked, setIsLiked] = useState(false);
-    // const heartImage = isLiked ? 'heart-on.png' : 'heart-off.png';
     const {id} = useAuthUserStore((state) => state.authUser) || "";
 
     /* 좋아요 정보 가져오기 */
