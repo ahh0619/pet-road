@@ -266,11 +266,9 @@ export const DetailWrap = styled.div`
   left: 430px;
   width: 400px;
   background-color: #fff;
-  min-height: calc(100% - 20px);
+  height: calc(100% - 20px);
   box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
-
-  height: 800px;
   overflow: auto;
 
   iframe {

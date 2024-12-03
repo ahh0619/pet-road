@@ -18,6 +18,12 @@ const Home = () => {
           setSelectedPlaceId={setSelectedPlaceId}
         />
       )}
+      {showBookmark && (
+        <MainContent
+          setShowDetail={setShowBookmark}
+          setSelectedPlaceId={setSelectedPlaceId}
+        />
+      )}
       {(showMain || showBookmark) && showDetail && (
         <DetailComponent
           setShowDetail={setShowDetail}
