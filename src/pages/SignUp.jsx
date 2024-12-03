@@ -1,4 +1,4 @@
-import UserForm from '../components/sign-up/UserForm';
+import SignUpForm from '../components/sign-up/SignUpForm';
 import { Main, Title, Wrap } from '../styles/user/signUpStyles';
 
 const SignUp = () => {
@@ -6,7 +6,7 @@ const SignUp = () => {
     <Wrap>
       <Main>
         <Title>회원가입</Title>
-        <UserForm />
+        <SignUpForm />
       </Main>
     </Wrap>
   );
