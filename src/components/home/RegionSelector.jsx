@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { SelectWrap, SearchSelect } from '../../styles/KakaoMapStyle';
+import axios from 'axios';
 
 const RegionSelector = ({
   onRegionChange,
@@ -12,10 +14,16 @@ const RegionSelector = ({
 
   // JSON 데이터 로드
   useEffect(() => {
-    fetch('/data/korea.json') // JSON 파일 경로
-      .then((res) => res.json())
-      .then((json) => setData(json))
-      .catch((err) => console.error('행정구역 데이터 로드 실패:', err));
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('/data/korea.json'); // JSON 파일 경로
+        setData(response.data);
+      } catch (error) {
+        console.error('행정구역 데이터 로드 실패:', error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   // 시/도 변경 핸들러
@@ -73,29 +81,27 @@ const RegionSelector = ({
   }, [selectedRegion, data]);
 
   return (
-    <div>
+    <SelectWrap>
       {/* 시/도 선택 드롭다운 */}
-      <select value={selectedRegion} onChange={handleRegionChange}>
+      <SearchSelect value={selectedRegion} onChange={handleRegionChange}>
         <option value="">시/도 선택</option>
         {Object.keys(data).map((region, index) => (
           <option key={index} value={region}>
             {region}
           </option>
         ))}
-      </select>
+      </SearchSelect>
 
       {/* 시/군/구 선택 드롭다운 */}
-      {combinedCities.length > 0 && (
-        <select value={selectedCity} onChange={handleCityChange}>
-          <option value="">시/군/구 선택</option>
-          {combinedCities.map((city, index) => (
-            <option key={index} value={city}>
-              {city}
-            </option>
-          ))}
-        </select>
-      )}
-    </div>
+      <SearchSelect value={selectedCity} onChange={handleCityChange}>
+        <option value="">시/군/구 선택</option>
+        {combinedCities.map((city, index) => (
+          <option key={index} value={city}>
+            {city}
+          </option>
+        ))}
+      </SearchSelect>
+    </SelectWrap>
   );
 };
 

@@ -1,7 +1,5 @@
-import React from 'react';
 import {
   HeartIcon,
-  Icon,
   ListBookmark,
   ListItem,
   ListWrap,
@@ -12,14 +10,12 @@ import {
   SearchTabLi,
   SearchTabUl,
   SelectWrap,
-  SerchInput,
-  SerchInputWrap,
   SerchListWrap,
   SerchTabWrap,
   SubTitleP,
   TitleP,
   AddressP,
-} from '../../styles/PubMapPageStyle';
+} from '../../styles/KakaoMapStyle';
 
 const MainContentsComponent = () => {
   return (
@@ -39,23 +35,14 @@ const MainContentsComponent = () => {
             <option value="중구">중구</option>
           </SearchSelect>
         </SelectWrap>
-        {/* 서치인풋 영역 */}
-        <SerchInputWrap>
-          <SerchInput />
-          <Icon className="fa-solid fa-magnifying-glass" />
-        </SerchInputWrap>
         {/* 탭 영역 */}
         <SearchTabUl>
           <SearchTabLi isActive="true">
-            <i class="fa-solid fa-hotel"></i>
+            <i className="fa-solid fa-hotel"></i>
             <p>숙박</p>
           </SearchTabLi>
           <SearchTabLi isActive="">
-            <i class="fa-solid fa-utensils"></i>
-            <p>맛집</p>
-          </SearchTabLi>
-          <SearchTabLi isActive="">
-            <i class="fa-solid fa-mug-saucer"></i>
+            <i className="fa-solid fa-mug-saucer"></i>
             <p>카페</p>
           </SearchTabLi>
         </SearchTabUl>

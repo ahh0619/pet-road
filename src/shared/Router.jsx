@@ -12,6 +12,7 @@ const AppRouter = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/sign-up" element={<SignUp />} />
         {/* 이하 퍼블리싱 테스트용 라우트입니다. */}
         <Route path="/publogin" element={<PubLogin />} />
