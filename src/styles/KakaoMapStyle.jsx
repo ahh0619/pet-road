@@ -30,10 +30,11 @@ export const SideBarLogoWrap = styled.div`
 export const Tab = styled.div`
   padding-top: 20px;
   padding-bottom: 10px;
+  text-align: center;
   cursor: pointer;
-  color: ${(props) => (props.selectOn === 'true' ? '#fff' : '#595959')};
+  color: ${(props) => (props.$selectOn === 'true' ? '#fff' : '#595959')};
   background-color: ${(props) =>
-    props.selectOn === 'true' ? '#ff6732' : '#fff'};
+    props.$selectOn === 'true' ? '#ff6732' : '#fff'};
   i {
     font-size: 25px;
   }
@@ -150,10 +151,10 @@ export const SearchTabLi = styled.li`
   font-size: 16px;
   border-radius: 30px;
   border: 1px solid
-    ${(props) => (props.isActive === 'true' ? '#ff6732' : '#bababa')};
+    ${(props) => (props.$isActive === 'true' ? '#ff6732' : '#bababa')};
   background-color: ${(props) =>
-    props.isActive === 'true' ? '#fff5ee' : 'transparent'};
-  color: ${(props) => (props.isActive === 'true' ? '#ff6732' : '#999')};
+    props.$isActive === 'true' ? '#fff5ee' : 'transparent'};
+  color: ${(props) => (props.$isActive === 'true' ? '#ff6732' : '#999')};
   display: flex;
   align-items: center; /* 아이콘과 텍스트 정렬 */
   gap: 5px; /* 아이콘과 텍스트 간격 */
@@ -226,7 +227,7 @@ export const ListBookmark = styled.div`
 `;
 
 export const HeartIcon = styled.i`
-  display: ${(props) => (props.isActive === 'true' ? 'block' : 'none')};
+  display: ${(props) => (props.$isActive === 'true' ? 'block' : 'none')};
 `;
 
 export const PhoneP = styled.p`

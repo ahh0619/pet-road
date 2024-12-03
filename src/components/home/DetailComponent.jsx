@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { DetailWrap, CloseBtn, ControlMenu } from '../../styles/KakaoMapStyle';
 
-const DetailComponent = ({ place_id = '1692043917', setShowDetail }) => {
+const DetailComponent = ({ selectedPlaceId = '1692043917', setShowDetail }) => {
   const [url, setUrl] = useState('');
   const [isLiked, setIsLiked] = useState(false);
   const heartImage = isLiked ? 'heart-on.png' : 'heart-off.png';
@@ -20,8 +20,8 @@ const DetailComponent = ({ place_id = '1692043917', setShowDetail }) => {
   };
 
   useEffect(() => {
-    setUrl(`https://place.map.kakao.com/m/${place_id}`);
-  }, [place_id]);
+    setUrl(`https://place.map.kakao.com/m/${selectedPlaceId}`);
+  }, [selectedPlaceId]);
 
   return (
     <DetailWrap>
