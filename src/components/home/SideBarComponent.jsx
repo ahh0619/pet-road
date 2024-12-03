@@ -1,10 +1,9 @@
-import React from 'react';
 import {
   SideBar,
   SideBarLogoWrap,
   Tab,
   UserWrap,
-} from '../../styles/PubMapPageStyle';
+} from '../../styles/KakaoMapStyle';
 import { Hr } from '../../styles/PubLoginStyle';
 
 const SideBarComponent = () => {
@@ -15,17 +14,17 @@ const SideBarComponent = () => {
       </SideBarLogoWrap>
       <Hr bottomGap="false" />
       <Tab selectOn="true">
-        <i class="fa-solid fa-location-dot"></i>
+        <i className="fa-solid fa-location-dot"></i>
         <br />
         <p>지도 홈</p>
       </Tab>
       <Tab>
-        <i class="fa-solid fa-heart"></i>
+        <i className="fa-solid fa-heart"></i>
         <br />
         <p>북마크</p>
       </Tab>
       <UserWrap>
-        <i class="fa-solid fa-circle-user"></i>
+        <i className="fa-solid fa-circle-user"></i>
       </UserWrap>
     </SideBar>
   );
