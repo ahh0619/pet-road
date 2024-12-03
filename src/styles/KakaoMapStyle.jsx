@@ -150,10 +150,10 @@ export const SearchTabLi = styled.li`
   font-size: 16px;
   border-radius: 30px;
   border: 1px solid
-    ${(props) => (props.isActive === 'true' ? '#ff6732' : '#bababa')};
+    ${(props) => (props.$isActive === 'true' ? '#ff6732' : '#bababa')};
   background-color: ${(props) =>
-    props.isActive === 'true' ? '#fff5ee' : 'transparent'};
-  color: ${(props) => (props.isActive === 'true' ? '#ff6732' : '#999')};
+    props.$isActive === 'true' ? '#fff5ee' : 'transparent'};
+  color: ${(props) => (props.$isActive === 'true' ? '#ff6732' : '#999')};
   display: flex;
   align-items: center; /* 아이콘과 텍스트 정렬 */
   gap: 5px; /* 아이콘과 텍스트 간격 */
@@ -201,15 +201,15 @@ export const ListLine = styled.div`
 `;
 
 export const TitleP = styled.p`
-  color: ${(props) => (props.isListTitle === 'true' ? '#4b74c6' : '#404040')};
+  color: ${(props) => (props.$isListTitle === 'true' ? '#4b74c6' : '#404040')};
   font-weight: bold;
-  font-size: ${(props) => (props.isListTitle === 'true' ? '18px' : '16px')};
+  font-size: ${(props) => (props.$isListTitle === 'true' ? '18px' : '16px')};
   display: inline-block;
-  max-width: ${(props) => (props.isListTitle === 'true' ? '270px' : '200px')};
+  max-width: ${(props) => (props.$isListTitle === 'true' ? '270px' : '200px')};
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  padding-left: ${(props) => (props.isListTitle === 'true' ? '0px' : '5px')};
+  padding-left: ${(props) => (props.$isListTitle === 'true' ? '0px' : '5px')};
 `;
 export const SubTitleP = styled.p`
   color: #7e7e7e;
@@ -226,18 +226,18 @@ export const ListBookmark = styled.div`
 `;
 
 export const HeartIcon = styled.i`
-  display: ${(props) => (props.isActive === 'true' ? 'block' : 'none')};
+  display: ${(props) => (props.$isActive === 'true' ? 'block' : 'none')};
 `;
 
 export const PhoneP = styled.p`
   color: #ff6732;
   display: inline-block;
-  font-size: ${(props) => (props.isListTitle === 'true' ? '16px' : '14px')};
+  font-size: ${(props) => (props.$isListTitle === 'true' ? '16px' : '14px')};
 `;
 
 export const AddressP = styled.p`
   color: #404040;
-  font-size: ${(props) => (props.isListTitle === 'true' ? '16px' : '14px')};
+  font-size: ${(props) => (props.$isListTitle === 'true' ? '16px' : '14px')};
 `;
 
 export const MoreButton = styled.button`
