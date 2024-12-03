@@ -9,14 +9,12 @@ const Home = () => {
   const [showMain, setShowMain] = useState(true);
   const [showDetail, setShowDetail] = useState(false);
   const [showBookmark, setShowBookmark] = useState(false);
-  const [selectedPlaceId, setSelectedPlaceId] = useState(null);
 
   return (
     <>
       {showMain && (
         <MainContent
           setShowDetail={setShowDetail}
-          setSelectedPlaceId={setSelectedPlaceId}
         />
       )}
       {showBookmark && (
@@ -28,7 +26,6 @@ const Home = () => {
       {(showMain || showBookmark) && showDetail && (
         <DetailComponent
           setShowDetail={setShowDetail}
-          selectedPlaceId={selectedPlaceId}
         />
       )}
       <SideBarComponent
