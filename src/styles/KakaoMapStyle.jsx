@@ -145,42 +145,40 @@ export const SearchTabUl = styled.ul`
 `;
 
 export const SearchTabLi = styled.li`
-  padding: 5px 10px;
+  padding: 8px 15px; /* 버튼 크기 조정 */
   cursor: pointer;
   font-size: 16px;
-  color: ${(props) =>
-    props.isActive === 'true'
-      ? '#ff6732'
-      : '#999'}; /* 활성화 상태에 따라 색상 변경 */
-  border: ${(props) =>
-    props.isActive === 'true'
-      ? '1px solid #ff6732'
-      : '1px solid #bababa'}; /* 활성화 상태에 따라 테두리 변경 */
   border-radius: 30px;
+  border: 1px solid
+    ${(props) => (props.isActive === 'true' ? '#ff6732' : '#bababa')};
   background-color: ${(props) =>
-    props.isActive === 'true'
-      ? '#fff5ee'
-      : 'transparent'}; /* 활성화 상태에 따라 배경 변경 */
+    props.isActive === 'true' ? '#fff5ee' : 'transparent'};
+  color: ${(props) => (props.isActive === 'true' ? '#ff6732' : '#999')};
+  display: flex;
+  align-items: center; /* 아이콘과 텍스트 정렬 */
+  gap: 5px; /* 아이콘과 텍스트 간격 */
 
   i {
-    color: ${(props) =>
-      props.isActive === 'true' ? '#ff6732' : '#999'}; /* 아이콘 색상 변경 */
+    color: inherit; /* 상위 색상(color)을 상속 */
+    transition: color 0.2s ease; /* 부드러운 색상 전환 */
   }
 
   p {
-    display: inline;
-    padding-left: 5px;
+    margin: 0;
+    padding: 0;
   }
 
   &:hover {
-    color: #ff6732;
-    border: 1px solid #ff6732;
+    border-color: #ff6732;
     background-color: #fff5ee;
+    color: #ff6732;
 
     i {
-      color: #ff6732;
+      color: #ff6732; /* 호버 시 아이콘 색상 */
     }
   }
+
+  transition: all 0.3s ease; /* 부드러운 전환 효과 */
 `;
 
 export const ListWrap = styled.div`
@@ -278,7 +276,7 @@ export const DetailWrap = styled.div`
     width: 100%;
     height: 6800px;
     border: none;
-    overflow: hidden; 
+    overflow: hidden;
   }
 
   /* 커스텀 스크롤바 스타일 */
@@ -291,10 +289,10 @@ export const DetailWrap = styled.div`
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: #FFAD32; /* 스크롤바 색상 */
+    background-color: #ffad32; /* 스크롤바 색상 */
     border-radius: 10px; /* 스크롤바 모서리 둥글게 */
     border: 2px solid #fff; /* 스크롤바 테두리 */
-    cursor: pointer; 
+    cursor: pointer;
   }
 
   &::-webkit-scrollbar-thumb:hover {
@@ -303,38 +301,38 @@ export const DetailWrap = styled.div`
 `;
 
 export const CloseBtn = styled.div`
-    width: 90px;
-    height: 40px;
-    background-color: #ffffff;
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    z-index: 100;
+  width: 90px;
+  height: 40px;
+  background-color: #ffffff;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  z-index: 100;
 
-    font-size: 30px;
-    text-align: right;
-    padding-right: 10px;
-`
+  font-size: 30px;
+  text-align: right;
+  padding-right: 10px;
+`;
 
 export const ControlMenu = styled.div`
-    width: 390px;
-    height: 60px;
-    background-color: #ffffff;
-    position: absolute;
-    top: 280px; 
-    text-align: right;
-    z-index: 100;
+  width: 390px;
+  height: 60px;
+  background-color: #ffffff;
+  position: absolute;
+  top: 280px;
+  text-align: right;
+  z-index: 100;
 
-    img{
-        width: 35px;
-        margin-top: 15px;
-        margin-right: 15px;
+  img {
+    width: 35px;
+    margin-top: 15px;
+    margin-right: 15px;
 
-        &:hover{
-            cursor: pointer;
-        }
+    &:hover {
+      cursor: pointer;
     }
-`
+  }
+`;
 
 export const MyPageTitle = styled.div`
   display: flex;
