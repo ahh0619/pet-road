@@ -1,5 +1,41 @@
 import styled from 'styled-components';
 
+export const UserProfileDiv = styled.div`
+  margin: 0 auto;
+  text-align: center;
+  width: 34px;
+  height: 34px;
+  background-image: url(${(props) => props.$backgroundUrl});
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  overflow: hidden;
+`;
+export const LogoutBtn = styled.button`
+  cursor: pointer;
+  position: absolute;
+  top: 21px;
+  right: 10px;
+  border: none;
+  background-color: #fff;
+  i {
+    font-size: 18px;
+    color: #777;
+  }
+`;
+
+export const MypageDiv = styled.div`
+  bottom: 20px;
+  left: 10%;
+  background: white; /* 배경색 추가로 다른 요소와의 겹침 문제 해결 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+`;
+export const UserProfileWrap = styled.div`
+  position: relative;
+  cursor: pointer;
+  width: 100%;
+`;
 export const MapWrap = styled.div`
   width: 100%;
   min-height: 100vh;
@@ -53,16 +89,12 @@ export const UserWrap = styled.div`
   padding-top: 15px;
   padding-bottom: 8px;
   border-top: 1px solid #a9a9a9;
-
-  i {
-    font-size: 34px;
-  }
 `;
 
 export const SerchListWrap = styled.div`
   position: absolute;
   overflow-y: auto;
-  z-index: 9999;
+  z-index: 99;
   top: 0px;
   left: 67px;
   width: 350px;

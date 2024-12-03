@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useKakaoLoader } from 'react-kakao-maps-sdk';
 import useCurrentLocation from '../../hooks/useCurrentLocation';
 import useMapStore from '../../stores/useMapStore';
+
 import MapControls from './MapControls';
 
 const KakaoMap = () => {
@@ -12,7 +13,7 @@ const KakaoMap = () => {
     appkey: import.meta.env.VITE_REACT_APP_KAKAOMAP_KEY,
     libraries: ['clusterer', 'drawing', 'services'],
   });
-  
+
   const [currentMarker, setCurrentMarker] = useState(null);
 
   // 초기 지도 설정
