@@ -31,7 +31,7 @@ const SideBarComponent = () => {
 
       <UserWrap onClick={() => setIsMyPageVisible(!isMyPageVisible)}>
         <i className="fa-solid fa-circle-user"></i>
-        <UserProfileWrap>
+        <UserProfileWrap onClick={(e) => e.stopPropagation()}>
           {isMyPageVisible && <MyPageComponent />}
         </UserProfileWrap>
       </UserWrap>

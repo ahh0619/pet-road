@@ -1,5 +1,10 @@
 import styled from 'styled-components';
-
+export const UserProfileDiv = styled.div`
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: #3498db; /* 원하는 배경색으로 변경 */
+`;
 export const MypageDiv = styled.div`
   bottom: 20px;
   left: 10%;
