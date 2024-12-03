@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useKakaoLoader } from 'react-kakao-maps-sdk';
-import MapControls from './MapControls'; // MapControls 컴포넌트
-import useCurrentLocation from '../../hooks/useCurrentLocation'; // useCurrentLocation 훅
-import useMapStore from '../../stores/useMapStore'; // 변경된 Zustand 스토어
+import MapControls from './MapControls';
+import useCurrentLocation from '../../hooks/useCurrentLocation';
+import useMapStore from '../../stores/useMapStore';
+import RegionSelector from './RegionSelector';
 
 const KakaoMap = () => {
   const location = useCurrentLocation(); // 현재 위치 가져오기
@@ -14,13 +15,15 @@ const KakaoMap = () => {
 
   const [markers, setMarkers] = useState([]);
   const [infowindow, setInfowindow] = useState(null);
-  const [clickPosition, setClickPosition] = useState(null);
-  const [address, setAddress] = useState('');
-  const [clickMarker, setClickMarker] = useState(null);
   const [currentMarker, setCurrentMarker] = useState(null); // 내 현재 위치 마커
-  const [places, setPlaces] = useState([]);
-  const [keyword, setKeyword] = useState('');
+  const [places, setPlaces] = useState([]); // 검색 결과
+  const [selectedCategory, setSelectedCategory] = useState(''); // 선택된 카테고리
 
+  // RegionSelector 상태
+  const [selectedRegion, setSelectedRegion] = useState('');
+  const [selectedCity, setSelectedCity] = useState('');
+
+  // 초기 지도 설정
   useEffect(() => {
     if (!loading && !error) {
       const mapContainer = document.getElementById('map');
@@ -37,65 +40,17 @@ const KakaoMap = () => {
         zIndex: 1,
       });
       setInfowindow(infowindowInstance);
-
-      // 클릭 마커 설정
-      const markerInstance = new window.kakao.maps.Marker({
-        position: mapInstance.getCenter(),
-      });
-      markerInstance.setMap(mapInstance);
-      setClickMarker(markerInstance);
-
-      // 지도 클릭 이벤트 추가
-      window.kakao.maps.event.addListener(
-        mapInstance,
-        'click',
-        (mouseEvent) => {
-          const latlng = mouseEvent.latLng;
-
-          // 클릭한 위치 마커 이동
-          markerInstance.setPosition(latlng);
-          setClickPosition({ lat: latlng.getLat(), lng: latlng.getLng() });
-
-          // 좌표 -> 주소 변환 요청
-          const geocoder = new window.kakao.maps.services.Geocoder();
-          geocoder.coord2Address(
-            latlng.getLng(),
-            latlng.getLat(),
-            (result, status) => {
-              if (status === window.kakao.maps.services.Status.OK) {
-                const address =
-                  result[0]?.road_address?.address_name ||
-                  result[0]?.address?.address_name ||
-                  '주소 정보 없음';
-                setAddress(address);
-
-                // 클릭 위치에 인포윈도우 표시
-                infowindowInstance.setContent(`
-                <div style="padding:10px; font-size:14px;">
-                  <strong>클릭한 위치</strong><br/>
-                  ${address}<br/>
-                  위도: ${latlng.getLat()}<br/>
-                  경도: ${latlng.getLng()}
-                </div>
-              `);
-                infowindowInstance.open(mapInstance, markerInstance);
-              } else {
-                setAddress('주소 정보를 가져올 수 없습니다.');
-              }
-            },
-          );
-        },
-      );
     }
   }, [loading, error, setMap]);
 
+  // 초기 로딩 시 현재 위치 기반 RegionSelector 설정
   useEffect(() => {
     if (location && map) {
       const { lat, lng } = location;
       const center = new window.kakao.maps.LatLng(lat, lng);
       map.setCenter(center);
 
-      // 현재 위치 표시
+      // 현재 위치 마커 표시
       if (!currentMarker) {
         const marker = new window.kakao.maps.Marker({
           position: center,
@@ -110,57 +65,129 @@ const KakaoMap = () => {
       } else {
         currentMarker.setPosition(center);
       }
+
+      // 현재 위치 기반 RegionSelector 업데이트
+      const geocoder = new window.kakao.maps.services.Geocoder();
+      geocoder.coord2RegionCode(lng, lat, (result, status) => {
+        if (status === window.kakao.maps.services.Status.OK) {
+          const regionInfo = result.find((r) => r.region_type === 'H');
+          if (regionInfo) {
+            const regionName = regionInfo.region_1depth_name;
+            const cityName = regionInfo.region_2depth_name;
+
+            if (regionName && cityName) {
+              setSelectedRegion(regionName);
+              setSelectedCity(cityName);
+            }
+          }
+        }
+      });
     }
   }, [location, map, currentMarker]);
 
-  const searchPlaces = () => {
-    if (!keyword.trim()) {
-      alert('키워드를 입력해주세요!');
-      return;
-    }
+  // 지도 이동 시 RegionSelector 상태 업데이트
+  useEffect(() => {
+    if (map) {
+      const geocoder = new window.kakao.maps.services.Geocoder();
 
-    const ps = new window.kakao.maps.services.Places();
+      const updateRegionSelector = () => {
+        const center = map.getCenter();
 
-    if (location) {
-      const { lat, lng } = location;
+        geocoder.coord2RegionCode(
+          center.getLng(),
+          center.getLat(),
+          (result, status) => {
+            if (status === window.kakao.maps.services.Status.OK) {
+              const regionInfo = result.find((r) => r.region_type === 'H');
+              if (regionInfo) {
+                const newRegion = regionInfo.region_1depth_name || '';
+                const newCity = regionInfo.region_2depth_name || '';
 
-      ps.keywordSearch(
-        keyword,
-        (data, status) => {
-          if (status === window.kakao.maps.services.Status.OK) {
-            setPlaces(data);
-            displayPlaces(data);
-          } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
-            alert('검색 결과가 존재하지 않습니다.');
-          } else {
-            alert('검색 중 오류가 발생했습니다.');
-          }
-        },
-        {
-          location: new window.kakao.maps.LatLng(lat, lng),
-          radius: 20000,
-        },
+                if (!newRegion || !newCity) return;
+
+                setSelectedRegion(newRegion);
+                setSelectedCity(newCity);
+              }
+            }
+          },
+        );
+      };
+
+      window.kakao.maps.event.addListener(
+        map,
+        'center_changed',
+        updateRegionSelector,
       );
-    } else {
-      ps.keywordSearch(keyword, (data, status) => {
+
+      return () => {
+        window.kakao.maps.event.removeListener(
+          map,
+          'center_changed',
+          updateRegionSelector,
+        );
+      };
+    }
+  }, [map]);
+
+  // RegionSelector 변경 시 지도 이동
+  const handleRegionChange = ({ region, city }) => {
+    if (map && region && city) {
+      const geocoder = new window.kakao.maps.services.Geocoder();
+      const address = `${region} ${city}`;
+
+      geocoder.addressSearch(address, (result, status) => {
         if (status === window.kakao.maps.services.Status.OK) {
-          setPlaces(data);
-          displayPlaces(data);
-        } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
-          alert('검색 결과가 존재하지 않습니다.');
-        } else {
-          alert('검색 중 오류가 발생했습니다.');
+          const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
+          map.panTo(coords);
         }
       });
     }
   };
 
+  // 카테고리 검색
+  const searchByCategory = () => {
+    if (!selectedCategory) {
+      alert('카테고리를 선택해주세요!');
+      return;
+    }
+
+    const ps = new window.kakao.maps.services.Places();
+    const center = map.getCenter();
+
+    // 카테고리별로 키워드 추가
+    const keyword = selectedCategory === 'CE7' ? '애견 카페' : '애견 숙박';
+
+    ps.keywordSearch(
+      keyword,
+      (data, status) => {
+        if (status === window.kakao.maps.services.Status.OK) {
+          setPlaces(data);
+          displayPlaces(data);
+        } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
+          alert('주변에 시설이 존재하지 않아요.');
+        } else {
+          alert('검색 중 오류가 발생했습니다.');
+        }
+      },
+      {
+        location: new window.kakao.maps.LatLng(
+          center.getLat(),
+          center.getLng(),
+        ),
+        radius: 20000, // 검색 반경
+      },
+    );
+  };
+
+  // 검색 결과 마커 표시
   const displayPlaces = (places) => {
     const bounds = new window.kakao.maps.LatLngBounds();
 
+    // 기존 마커 초기화
     markers.forEach((marker) => marker.setMap(null));
     setMarkers([]);
 
+    // 새로운 마커 생성
     const newMarkers = places.map((place) => {
       const position = new window.kakao.maps.LatLng(place.y, place.x);
       const marker = new window.kakao.maps.Marker({
@@ -170,12 +197,13 @@ const KakaoMap = () => {
       marker.setMap(map);
       bounds.extend(position);
 
+      // 마커 클릭 이벤트
       window.kakao.maps.event.addListener(marker, 'click', () => {
         infowindow.setContent(`
           <div style="padding:10px; font-size:14px;">
             <strong>${place.place_name}</strong><br/>
             ${place.road_address_name || place.address_name}<br/>
-            ${place.phone ? `전화번호: ${place.phone}` : ''}
+            ${place.phone ? `전화번호: ${place.phone}` : '전화번호 없음'}
           </div>
         `);
         infowindow.open(map, marker);
@@ -193,7 +221,6 @@ const KakaoMap = () => {
 
   return (
     <div style={{ display: 'flex', height: '100vh', width: '100%' }}>
-      {/* 검색 결과 리스트 */}
       <div
         style={{
           width: '300px',
@@ -203,25 +230,48 @@ const KakaoMap = () => {
           backgroundColor: '#f9f9f9',
         }}
       >
+        <RegionSelector
+          selectedRegion={selectedRegion}
+          selectedCity={selectedCity}
+          setSelectedRegion={setSelectedRegion}
+          setSelectedCity={setSelectedCity}
+          onRegionChange={handleRegionChange}
+        />
         <div>
-          <input
-            type="text"
-            placeholder="검색 키워드"
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '10px',
-              marginBottom: '10px',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-            }}
-          />
           <button
-            onClick={searchPlaces}
+            onClick={() => setSelectedCategory('CE7')}
+            style={{
+              padding: '10px',
+              margin: '5px',
+              backgroundColor: selectedCategory === 'CE7' ? '#007bff' : '#ccc',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+            }}
+          >
+            카페
+          </button>
+          <button
+            onClick={() => setSelectedCategory('AD5')}
+            style={{
+              padding: '10px',
+              margin: '5px',
+              backgroundColor: selectedCategory === 'AD5' ? '#007bff' : '#ccc',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+            }}
+          >
+            펜션
+          </button>
+          <button
+            onClick={searchByCategory}
             style={{
               width: '100%',
               padding: '10px',
+              marginTop: '10px',
               backgroundColor: '#007bff',
               color: 'white',
               border: 'none',
@@ -229,10 +279,11 @@ const KakaoMap = () => {
               cursor: 'pointer',
             }}
           >
-            검색
+            현 위치로 검색
           </button>
         </div>
 
+        {/* 검색 결과 리스트 */}
         <ul style={{ listStyle: 'none', padding: 0, marginTop: '10px' }}>
           {places.map((place, index) => (
             <li
@@ -241,62 +292,40 @@ const KakaoMap = () => {
                 padding: '10px',
                 borderBottom: '1px solid #ddd',
                 cursor: 'pointer',
-                backgroundColor: '#fff',
+                backgroundColor: index % 2 === 0 ? '#f9f9f9' : '#ffffff',
               }}
               onClick={() => {
                 const marker = markers[index];
-                infowindow.setContent(`
-                  <div style="padding:10px; font-size:14px;">
-                    <strong>${place.place_name}</strong><br/>
-                    ${place.road_address_name || place.address_name}<br/>
-                    ${place.phone ? `전화번호: ${place.phone}` : ''}
-                  </div>
-                `);
-                infowindow.open(map, marker);
-                map.panTo(marker.getPosition());
+                if (marker) {
+                  infowindow.setContent(`
+            <div style="padding:10px; font-size:14px;">
+              <strong>${place.place_name}</strong><br/>
+              ${place.road_address_name || place.address_name}<br/>
+              ${place.phone ? `전화번호: ${place.phone}` : '전화번호 없음'}
+            </div>
+          `);
+                  infowindow.open(map, marker);
+                  map.panTo(marker.getPosition());
+                }
               }}
             >
-              <strong>{place.place_name}</strong>
+              <strong style={{ fontSize: '16px' }}>{place.place_name}</strong>
               <br />
-              {place.road_address_name || place.address_name}
+              <span style={{ color: '#555' }}>
+                {place.road_address_name || place.address_name}
+              </span>
               <br />
-              {place.phone}
+              <span style={{ color: place.phone ? '#007bff' : '#999' }}>
+                {place.phone || '전화번호 없음'}
+              </span>
             </li>
           ))}
         </ul>
       </div>
 
-      {/* 지도 */}
       <div style={{ position: 'relative', flex: 1 }}>
         <div id="map" style={{ width: '100%', height: '100%' }}></div>
-
-        {/* 지도 컨트롤러 */}
         <MapControls location={location} />
-
-        {/* 클릭한 위치 정보 */}
-        <div
-          id="clickLatlng"
-          style={{
-            position: 'absolute',
-            bottom: '10px',
-            left: '10px',
-            zIndex: 100,
-            backgroundColor: 'white',
-            padding: '10px',
-            boxShadow: 'rgba(0, 0, 0, 0.1) 0px 4px 6px',
-          }}
-        >
-          {clickPosition ? (
-            <p>
-              <strong>주소</strong>: {address || '정보 없음'}
-              <br />
-              <strong>위도</strong>: {clickPosition.lat}, <strong>경도</strong>:{' '}
-              {clickPosition.lng}
-            </p>
-          ) : (
-            <p>지도를 클릭하여 위치를 선택하세요.</p>
-          )}
-        </div>
       </div>
     </div>
   );
