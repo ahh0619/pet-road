@@ -1,4 +1,5 @@
 import KakaoMap from '../components/home/KakaoMap';
+import MainContent from '../components/home/MainContent';
 import SideBarComponent from '../components/home/SideBarComponent';
 import DetailComponent from '../components/home/DetailComponent';
 import { useState } from 'react';
@@ -11,9 +12,25 @@ const Home = () => {
 
   return (
     <>
-      {showMain && <KakaoMap setShowDetail={setShowDetail} setSelectedPlaceId={setSelectedPlaceId} />}
-      {(showMain || showBookmark) && showDetail && <DetailComponent setShowDetail={setShowDetail} selectedPlaceId={selectedPlaceId} />}
-      <SideBarComponent showMain={showMain} setShowMain={setShowMain} showBookmark={showBookmark} setShowBookmark={setShowBookmark} />
+      {showMain && (
+        <MainContent
+          setShowDetail={setShowDetail}
+          setSelectedPlaceId={setSelectedPlaceId}
+        />
+      )}
+      {(showMain || showBookmark) && showDetail && (
+        <DetailComponent
+          setShowDetail={setShowDetail}
+          selectedPlaceId={selectedPlaceId}
+        />
+      )}
+      <SideBarComponent
+        showMain={showMain}
+        setShowMain={setShowMain}
+        showBookmark={showBookmark}
+        setShowBookmark={setShowBookmark}
+      />
+      <KakaoMap />
     </>
   );
 };

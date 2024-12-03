@@ -202,15 +202,15 @@ export const ListLine = styled.div`
 `;
 
 export const TitleP = styled.p`
-  color: ${(props) => (props.isListTitle === 'true' ? '#4b74c6' : '#404040')};
+  color: ${(props) => (props.$isListTitle === 'true' ? '#4b74c6' : '#404040')};
   font-weight: bold;
-  font-size: ${(props) => (props.isListTitle === 'true' ? '18px' : '16px')};
+  font-size: ${(props) => (props.$isListTitle === 'true' ? '18px' : '16px')};
   display: inline-block;
-  max-width: ${(props) => (props.isListTitle === 'true' ? '270px' : '200px')};
+  max-width: ${(props) => (props.$isListTitle === 'true' ? '270px' : '200px')};
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  padding-left: ${(props) => (props.isListTitle === 'true' ? '0px' : '5px')};
+  padding-left: ${(props) => (props.$isListTitle === 'true' ? '0px' : '5px')};
 `;
 export const SubTitleP = styled.p`
   color: #7e7e7e;
@@ -233,12 +233,12 @@ export const HeartIcon = styled.i`
 export const PhoneP = styled.p`
   color: #ff6732;
   display: inline-block;
-  font-size: ${(props) => (props.isListTitle === 'true' ? '16px' : '14px')};
+  font-size: ${(props) => (props.$isListTitle === 'true' ? '16px' : '14px')};
 `;
 
 export const AddressP = styled.p`
   color: #404040;
-  font-size: ${(props) => (props.isListTitle === 'true' ? '16px' : '14px')};
+  font-size: ${(props) => (props.$isListTitle === 'true' ? '16px' : '14px')};
 `;
 
 export const MoreButton = styled.button`
