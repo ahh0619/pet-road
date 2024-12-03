@@ -22,7 +22,10 @@ const KakaoMap = () => {
   }, [loading, error, setMap]);
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error loading Kakao Map</div>;
+  if (error) {
+    console.error("Error loading Kakao Map:", error);
+    return <div>Error loading Kakao Map</div>
+  };
 
   return <div id="map" style={{ width: '100%', height: '500px' }}></div>;
 };
