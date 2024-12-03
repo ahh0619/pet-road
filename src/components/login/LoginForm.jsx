@@ -1,37 +1,38 @@
-import useAuth from '../../hooks/auth/useAuth';
 import useForm from '../../hooks/useForm';
+import { toast } from 'react-toastify';
 import { Form, Input, SubmitButton } from '../../styles/user/UserFormStyles';
+import useAuth from '../../hooks/auth/useAuth';
 
 const initialValues = {
   email: '',
   password: '',
-  passwordCheck: '',
-  userName: '',
 };
 
-const UserForm = () => {
+const LoginForm = () => {
   const { values, handleInputChange } = useForm(initialValues);
-  const { signUpMutation } = useAuth();
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    signUpMutation.mutate(values);
+    try {
+      await login(values);
+      toast.success('로그인에 성공했습니다.');
+    } catch (error) {
+      if (error.code === 'invalid_credentials') {
+        toast.error('유효하지 않은 로그인 정보입니다.');
+      } else {
+        toast.error('로그인에 실패했습니다.');
+      }
+    }
   };
 
   return (
     <Form onSubmit={handleSubmit}>
       <Input
-        type="email"
+        type="text"
         placeholder="이메일"
         name="email"
         value={values['email']}
-        onChange={handleInputChange}
-      />
-      <Input
-        type="text"
-        placeholder="닉네임"
-        name="userName"
-        value={values['userName']}
         onChange={handleInputChange}
       />
       <Input
@@ -41,16 +42,9 @@ const UserForm = () => {
         value={values['password']}
         onChange={handleInputChange}
       />
-      <Input
-        type="password"
-        placeholder="비밀번호 확인"
-        name="passwordCheck"
-        value={values['passwordCheck']}
-        onChange={handleInputChange}
-      />
-      <SubmitButton type="submit">가입하기</SubmitButton>
+      <SubmitButton type="submit">로그인</SubmitButton>
     </Form>
   );
 };
 
-export default UserForm;
+export default LoginForm;

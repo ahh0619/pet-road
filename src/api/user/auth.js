@@ -1,7 +1,7 @@
 import { supabase } from '../supabase/supabase';
 import defaultProfileImagePath from '/defaultProfile.png?url';
 
-export const signUp = async (newAuthUser) => {
+export const signUp = async ({ newAuthUser }) => {
   const doesUserExist = await fetchUserInfoByUserName(newAuthUser.userName);
   if (doesUserExist) {
     const error = new Error();
@@ -27,11 +27,11 @@ const addUserInfo = async (userInfo) => {
   if (error) throw error;
 };
 
-// export const requestLogin = async (authInfo) => {
-//   const { data, error } = await supabase.auth.signInWithPassword(authInfo);
-//   if (error) throw error;
-//   return data.user;
-// };
+export const requestLogin = async (authInfo) => {
+  const { data, error } = await supabase.auth.signInWithPassword(authInfo);
+  if (error) throw error;
+  return data.user;
+};
 
 const fetchUserInfoByUserName = async (userName) => {
   const { data, error } = await supabase
@@ -43,12 +43,12 @@ const fetchUserInfoByUserName = async (userName) => {
   return data;
 };
 
-// export const fetchUserInfoById = async (id) => {
-//   const { data, error } = await supabase
-//     .from('users')
-//     .select()
-//     .eq('id', id)
-//     .maybeSingle();
-//   if (error) throw error;
-//   return data;
-// };
+export const fetchUserInfoById = async (id) => {
+  const { data, error } = await supabase
+    .from('users')
+    .select()
+    .eq('id', id)
+    .maybeSingle();
+  if (error) throw error;
+  return data;
+};
