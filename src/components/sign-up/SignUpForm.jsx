@@ -1,8 +1,9 @@
 import { useForm } from 'react-hook-form';
 import useAuth from '../../hooks/auth/useAuth';
-import { Form, SubmitButton } from '../../styles/user/UserFormStyles';
 import { useRef } from 'react';
 import InputWithErrorMessage from './InputWithErrorMessage';
+import { SignButton } from '../../styles/PubLoginStyle';
+import { Form } from '../../styles/user/UserFormStyles';
 
 const SignUpForm = () => {
   const { signUpMutation } = useAuth();
@@ -48,7 +49,7 @@ const SignUpForm = () => {
         register={register('userName', {
           required: '필수 입력 값입니다.',
         })}
-        error={errors.nickname}
+        error={errors.userName}
       />
       <InputWithErrorMessage
         inputData={{ type: 'password', placeholder: '비밀번호' }}
@@ -70,7 +71,7 @@ const SignUpForm = () => {
         })}
         error={errors.passwordCheck}
       />
-      <SubmitButton type="submit">가입하기</SubmitButton>
+      <SignButton>가입</SignButton>
     </Form>
   );
 };

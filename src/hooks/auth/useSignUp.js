@@ -19,7 +19,7 @@ const useSignUp = () => {
           message: '이미 가입된 email 입니다.',
         });
       } else if (error.code === 'nickname_already_exists') {
-        setError('nickname', {
+        setError('userName', {
           type: 'existNickname',
           message: '이미 존재하는 닉네임입니다.',
         });

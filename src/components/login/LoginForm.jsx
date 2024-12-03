@@ -1,7 +1,7 @@
 import useForm from '../../hooks/useForm';
 import { toast } from 'react-toastify';
-import { Form, Input, SubmitButton } from '../../styles/user/UserFormStyles';
 import useAuth from '../../hooks/auth/useAuth';
+import { Input, SignButton } from '../../styles/PubLoginStyle';
 
 const initialValues = {
   email: '',
@@ -27,7 +27,7 @@ const LoginForm = () => {
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <Input
         type="text"
         placeholder="이메일"
@@ -42,8 +42,8 @@ const LoginForm = () => {
         value={values['password']}
         onChange={handleInputChange}
       />
-      <SubmitButton type="submit">로그인</SubmitButton>
-    </Form>
+      <SignButton type="submit">입장</SignButton>
+    </form>
   );
 };
 

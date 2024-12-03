@@ -1,8 +1,8 @@
 import { supabase } from '../../api/supabase/supabase';
 import { fetchUserInfoById, requestLogin } from '../../api/user/auth';
-import useAuthUserStore from '../../stores/authUserStore';
 import { useNavigate } from 'react-router-dom';
 import useSignUp from './useSignUp';
+import useAuthUserStore from '../../stores/useAuthUserStore';
 
 const useAuth = () => {
   const { setAuthUser, clearAuthUser } = useAuthUserStore((state) => state);

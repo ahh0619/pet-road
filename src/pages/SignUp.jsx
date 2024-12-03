@@ -1,14 +1,20 @@
+import LoginSignUpUI from '../components/login/LoginSignUpUI';
 import SignUpForm from '../components/sign-up/SignUpForm';
-import { Main, Title, Wrap } from '../styles/user/signUpStyles';
+import { Hr, SignDiv, SignTitle } from '../styles/PubLoginStyle';
 
 const SignUp = () => {
   return (
-    <Wrap>
-      <Main>
-        <Title>회원가입</Title>
+    <LoginSignUpUI>
+      <SignDiv bottomGap="true">
+        <SignTitle>회원가입</SignTitle>
+        <Hr />
         <SignUpForm />
-      </Main>
-    </Wrap>
+        {/* <TxtP>
+        현재 위치 공유에 동의 하십니까?
+        <input type="checkbox" />
+      </TxtP> */}
+      </SignDiv>
+    </LoginSignUpUI>
   );
 };
 

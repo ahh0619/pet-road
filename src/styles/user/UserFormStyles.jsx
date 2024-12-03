@@ -23,7 +23,5 @@ export const Input = styled.input`
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 20px;
-  border-radius: 8px;
+  gap: 15px;
 `;

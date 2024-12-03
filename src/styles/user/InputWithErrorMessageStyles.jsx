@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Input } from "../PubLoginStyle";
 
 export const Wrap = styled.div`
   display: flex;
@@ -12,3 +13,7 @@ export const ErrorMessage = styled.p`
   padding-left: 5px;
   height: 0.6rem;
 `;
+
+export const AuthInput = styled(Input)`
+  margin-bottom: 0;
+`
