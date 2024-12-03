@@ -22,7 +22,7 @@ function LikeComponent({ selectedPlaceId }) {
 
 
     const handleLikeBtn = async () => {
-        if(!id){ toast.error("북마크는 로그인 후 이용해 주세요!"); return }
+        if(!id){ toast.error("북마크는 로그인 후 이용할 수 있어요."); return }
         /* 좋아요 버튼 눌렀을 때 로직 처리 */
         if (isLiked) {
             const { error } = await supabase.from('bookmarks').delete().eq('user_id', id).eq('place_id', selectedPlaceId);
