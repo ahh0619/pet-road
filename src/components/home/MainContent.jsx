@@ -19,6 +19,7 @@ import useMapStore from '../../stores/useMapStore';
 import { createInfoWindowContent } from '../../utils/infoWindowUitl';
 import { useEffect } from 'react';
 import usePlaceStore from '../../stores/usePlaceStore';
+import { toast } from 'react-toastify';
 
 const MainContent = ({ setShowDetail }) => {
   const {
@@ -53,7 +54,7 @@ const MainContent = ({ setShowDetail }) => {
 
   const searchByCategory = () => {
     if (!selectedCategory) {
-      alert('카테고리를 선택해주세요!');
+      toast.error('카테고리를 선택해주세요!');
       return;
     }
 
@@ -80,9 +81,9 @@ const MainContent = ({ setShowDetail }) => {
               displayPlaces(allResults);
             }
           } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
-            alert('주변에 해당 시설이 존재하지 않아요.');
+            toast.error('주변에 해당 시설이 존재하지 않아요.');
           } else {
-            alert('검색 중 오류가 발생했습니다.');
+            toast.error('검색 중 오류가 발생했습니다.');
           }
         },
         {
@@ -180,10 +181,11 @@ const MainContent = ({ setShowDetail }) => {
             <ListLine>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <i
-                  className={`fa-solid ${place.category_name?.includes('카페')
+                  className={`fa-solid ${
+                    place.category_name?.includes('카페')
                       ? 'fa-mug-saucer'
                       : 'fa-hotel'
-                    }`}
+                  }`}
                   style={{ color: '#ff6732', marginRight: '8px' }}
                 ></i>
                 <TitleP $isListTitle="true">{place.place_name}</TitleP>
