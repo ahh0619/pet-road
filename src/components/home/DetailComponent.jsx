@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react';
 import { DetailWrap, CloseBtn, ControlMenu } from '../../styles/KakaoMapStyle';
 import LikeComponent from './LikeComponent';
+import usePlaceStore from '../../stores/usePlaceStore';
 
-const DetailComponent = ({ selectedPlaceId = '1692043917', setShowDetail }) => {
+const DetailComponent = ({ setShowDetail }) => {
   const [url, setUrl] = useState('');
+  const {selectedPlace} = usePlaceStore();
 
   const handleCloseBtn = () => {
     setShowDetail(false);
   };
 
   useEffect(() => {
-    setUrl(`https://place.map.kakao.com/m/${selectedPlaceId}`);
-  }, [selectedPlaceId]);
+    setUrl(`https://place.map.kakao.com/m/${selectedPlace.id || '1692043917'}`);
+  }, [selectedPlace.id]);
 
   return (
     <DetailWrap>
@@ -23,7 +25,7 @@ const DetailComponent = ({ selectedPlaceId = '1692043917', setShowDetail }) => {
       </CloseBtn>
       <ControlMenu>
         {/*좋아요 버튼*/}
-        <LikeComponent selectedPlaceId={selectedPlaceId}/>
+        <LikeComponent/>
       </ControlMenu>
     </DetailWrap>
   );
