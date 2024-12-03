@@ -249,7 +249,10 @@ const KakaoMap = () => {
   }, [selectedCategory]);
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error loading Kakao Map</div>;
+  if (error) {
+    console.error("Error loading Kakao Map:", error);
+    return <div>Error loading Kakao Map</div>
+  };
 
   return (
     <div style={{ display: 'flex', height: '100vh', width: '100%' }}>

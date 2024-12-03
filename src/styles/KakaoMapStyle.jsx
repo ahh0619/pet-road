@@ -270,7 +270,71 @@ export const DetailWrap = styled.div`
   min-height: calc(100% - 20px);
   box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
+
+  height: 800px;
+  overflow: auto;
+
+  iframe {
+    width: 100%;
+    height: 6800px;
+    border: none;
+    overflow: hidden; 
+  }
+
+  /* 커스텀 스크롤바 스타일 */
+  &::-webkit-scrollbar {
+    width: 10px; /* 스크롤바의 너비 */
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #f1f1f1; /* 트랙 배경색 */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #FFAD32; /* 스크롤바 색상 */
+    border-radius: 10px; /* 스크롤바 모서리 둥글게 */
+    border: 2px solid #fff; /* 스크롤바 테두리 */
+    cursor: pointer; 
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #e68a00; /* 스크롤바에 마우스를 올릴 때 색상 */
+  }
 `;
+
+export const CloseBtn = styled.div`
+    width: 90px;
+    height: 40px;
+    background-color: #ffffff;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: 100;
+
+    font-size: 30px;
+    text-align: right;
+    padding-right: 10px;
+`
+
+export const ControlMenu = styled.div`
+    width: 390px;
+    height: 60px;
+    background-color: #ffffff;
+    position: absolute;
+    top: 280px; 
+    text-align: right;
+    z-index: 100;
+
+    img{
+        width: 35px;
+        margin-top: 15px;
+        margin-right: 15px;
+
+        &:hover{
+            cursor: pointer;
+        }
+    }
+`
 
 export const MyPageTitle = styled.div`
   display: flex;
