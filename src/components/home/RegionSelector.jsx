@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { SelectWrap, SearchSelect } from '../../styles/KakaoMapStyle';
 
 const RegionSelector = ({
   onRegionChange,
@@ -73,29 +74,27 @@ const RegionSelector = ({
   }, [selectedRegion, data]);
 
   return (
-    <div>
+    <SelectWrap>
       {/* 시/도 선택 드롭다운 */}
-      <select value={selectedRegion} onChange={handleRegionChange}>
+      <SearchSelect value={selectedRegion} onChange={handleRegionChange}>
         <option value="">시/도 선택</option>
         {Object.keys(data).map((region, index) => (
           <option key={index} value={region}>
             {region}
           </option>
         ))}
-      </select>
+      </SearchSelect>
 
       {/* 시/군/구 선택 드롭다운 */}
-      {combinedCities.length > 0 && (
-        <select value={selectedCity} onChange={handleCityChange}>
-          <option value="">시/군/구 선택</option>
-          {combinedCities.map((city, index) => (
-            <option key={index} value={city}>
-              {city}
-            </option>
-          ))}
-        </select>
-      )}
-    </div>
+      <SearchSelect value={selectedCity} onChange={handleCityChange}>
+        <option value="">시/군/구 선택</option>
+        {combinedCities.map((city, index) => (
+          <option key={index} value={city}>
+            {city}
+          </option>
+        ))}
+      </SearchSelect>
+    </SelectWrap>
   );
 };
 

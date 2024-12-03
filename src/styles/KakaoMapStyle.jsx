@@ -60,6 +60,7 @@ export const UserWrap = styled.div`
 
 export const SerchListWrap = styled.div`
   position: absolute;
+  overflow-y: auto;
   z-index: 9999;
   top: 0px;
   left: 67px;
@@ -76,10 +77,9 @@ export const SerchTabWrap = styled.div`
 export const SelectWrap = styled.div`
   display: flex;
   justify-content: space-between;
+  gap: 5px;
   width: 100%;
   margin-bottom: 5px;
-  border-radius: 5px;
-  border: 1px solid #a9a9a9;
   box-sizing: border-box;
 `;
 
@@ -92,15 +92,18 @@ export const SearchSelect = styled.select`
   width: 50%;
   cursor: pointer;
   box-sizing: border-box;
-
+  border: 1px solid #a9a9a9;
+  border-radius: 5px;
   &:first-of-type {
     border-right: 1px solid #a9a9a9;
   }
 `;
+
 export const SerchInputWrap = styled.div`
   position: relative;
   width: 100%;
 `;
+
 export const SerchInput = styled.input`
   border: 2px solid #ff6732;
   border-radius: 5px;
@@ -138,24 +141,45 @@ export const SearchTabUl = styled.ul`
   font-weight: bold;
   justify-content: center;
   gap: 10px;
+  margin-top: 20px;
 `;
 
 export const SearchTabLi = styled.li`
   padding: 5px 10px;
   cursor: pointer;
   font-size: 16px;
-  color: ${(props) => (props.isActive === 'true' ? '#ff9011' : '#999')};
+  color: ${(props) =>
+    props.isActive === 'true'
+      ? '#ff6732'
+      : '#999'}; /* 활성화 상태에 따라 색상 변경 */
   border: ${(props) =>
-    props.isActive === 'true' ? '1px solid #ffa641' : '1px solid #bababa'};
+    props.isActive === 'true'
+      ? '1px solid #ff6732'
+      : '1px solid #bababa'}; /* 활성화 상태에 따라 테두리 변경 */
   border-radius: 30px;
+  background-color: ${(props) =>
+    props.isActive === 'true'
+      ? '#fff5ee'
+      : 'transparent'}; /* 활성화 상태에 따라 배경 변경 */
 
   i {
-    display: inline;
+    color: ${(props) =>
+      props.isActive === 'true' ? '#ff6732' : '#999'}; /* 아이콘 색상 변경 */
   }
 
   p {
     display: inline;
     padding-left: 5px;
+  }
+
+  &:hover {
+    color: #ff6732;
+    border: 1px solid #ff6732;
+    background-color: #fff5ee;
+
+    i {
+      color: #ff6732;
+    }
   }
 `;
 
@@ -163,6 +187,7 @@ export const ListWrap = styled.div`
   overflow-y: auto;
   text-align: left;
   line-height: 1.5;
+  height: calc(100vh - 230px);
 `;
 
 export const ListItem = styled.div`
@@ -312,4 +337,38 @@ export const FileName = styled.div`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+`;
+
+export const SearchButton = styled.button`
+  margin-top: 10px;
+  margin-left: 30px;
+  margin-bottom: 30px;
+  width: 80%;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #ff6732;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+  &:hover {
+    background-color: #e65d2d; /* Hover 시 색상 약간 어둡게 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Hover 시 그림자 강조 */
+  }
+
+  &:active {
+    background-color: #cc4f26; /* Active 상태 */
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2); /* Active 시 내부 그림자 */
+  }
+
+  &:disabled {
+    background-color: #a8a8a8; /* 비활성화 상태 */
+    cursor: not-allowed;
+    box-shadow: none;
+  }
 `;
