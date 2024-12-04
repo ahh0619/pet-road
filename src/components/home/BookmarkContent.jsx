@@ -13,7 +13,7 @@ import {
   PhoneP,
 } from '../../styles/KakaoMapStyle';
 import useMapStore from '../../stores/useMapStore';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import useBookmark from '../../hooks/bookmark/useBookmark';
 import usePlaceStore from '../../stores/usePlaceStore';
 
@@ -30,6 +30,28 @@ const BookmarkContent = ({ setShowDetail }) => {
       }))
       .sort((a, b) => new Date(b.create_at) - new Date(a.create_at));
   });
+
+  const [listWrapHeight, setListWrapHeight] = useState(0);
+
+  const serchTabWrapRef = useRef(null);
+
+  useEffect(() => {
+    const updateListWrapHeight = () => {
+      const tabHeight = serchTabWrapRef.current
+        ? serchTabWrapRef.current.clientHeight
+        : 0;
+      const windowHeight = window.innerHeight;
+      setListWrapHeight(windowHeight - tabHeight);
+    };
+
+    window.addEventListener('resize', updateListWrapHeight);
+
+    updateListWrapHeight();
+
+    return () => {
+      window.removeEventListener('resize', updateListWrapHeight);
+    };
+  }, []);
 
   useEffect(() => {
     setFilteredBookmarks(
@@ -69,7 +91,7 @@ const BookmarkContent = ({ setShowDetail }) => {
 
   return (
     <SerchListWrap>
-      <SerchTabWrap>
+      <SerchTabWrap ref={serchTabWrapRef}>
         <SearchTabUl $isActive="true">
           <SearchTabLi
             $isActive={selectedCategory === '카페' ? 'true' : 'false'}
@@ -88,7 +110,7 @@ const BookmarkContent = ({ setShowDetail }) => {
         </SearchTabUl>
       </SerchTabWrap>
 
-      <ListWrap>
+      <ListWrap style={{ height: `${listWrapHeight}px` }}>
         {filteredBookmarks
           .filter((place) => place.category_group_name === selectedCategory)
           .map((place) => (
