@@ -389,6 +389,7 @@ export const FileInput = styled.input`
 `;
 
 export const FileLabel = styled.label`
+  min-width: fit-content;
   background-color: #a9a9a9;
   color: white;
   padding: 5px 10px;
