@@ -5,7 +5,7 @@ import usePlaceStore from '../../stores/usePlaceStore';
 
 const DetailComponent = ({ setShowDetail }) => {
   const [url, setUrl] = useState('');
-  const {selectedPlace} = usePlaceStore();
+  const { selectedPlace } = usePlaceStore();
 
   const handleCloseBtn = () => {
     setShowDetail(false);
@@ -25,7 +25,7 @@ const DetailComponent = ({ setShowDetail }) => {
       </CloseBtn>
       <ControlMenu>
         {/*좋아요 버튼*/}
-        <LikeComponent/>
+        <LikeComponent />
       </ControlMenu>
     </DetailWrap>
   );

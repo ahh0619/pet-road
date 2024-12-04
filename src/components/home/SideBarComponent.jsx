@@ -24,6 +24,7 @@ const SideBarComponent = ({
       setShowMain(false);
     } else {
       setShowMain(true);
+      setShowBookmark(false);
     }
   };
 
@@ -32,6 +33,7 @@ const SideBarComponent = ({
       setShowBookmark(false);
     } else {
       setShowBookmark(true);
+      setShowMain(false);
     }
   };
 
