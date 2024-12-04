@@ -165,6 +165,38 @@ const MainContent = ({ setShowDetail }) => {
       toast.error('잘못된 페이지입니다.');
     }
   };
+  const adjustMapPosition = (map, marker) => {
+    const markerPosition = marker.getPosition();
+    const mapLevel = map.getLevel();
+
+    let lngOffset;
+    switch (mapLevel) {
+      case 1:
+      case 2:
+        lngOffset = -0.1;
+        break;
+      case 3:
+      case 4:
+        lngOffset = 0.03;
+        break;
+      case 5:
+      case 6:
+        lngOffset = 0.06;
+        break;
+      case 7:
+      case 8:
+        lngOffset = 0.08;
+        break;
+      default:
+        lngOffset = 0.13;
+        break;
+    }
+
+    return new window.kakao.maps.LatLng(
+      markerPosition.getLat(),
+      markerPosition.getLng() - lngOffset,
+    );
+  };
 
   return (
     <SerchListWrap>
@@ -207,7 +239,9 @@ const MainContent = ({ setShowDetail }) => {
               if (marker) {
                 infowindow.setContent(createInfoWindowContent(place));
                 infowindow.open(map, marker);
-                map.panTo(marker.getPosition());
+
+                const adjustedPosition = adjustMapPosition(map, marker);
+                map.panTo(adjustedPosition);
               }
               setSelectedPlace(place);
               setShowDetail(true);
