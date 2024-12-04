@@ -17,10 +17,10 @@ import {
 import RegionSelector from './RegionSelector';
 import useMapStore from '../../stores/useMapStore';
 import { createInfoWindowContent } from '../../utils/infoWindowUitl';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import usePlaceStore from '../../stores/usePlaceStore';
 import { toast } from 'react-toastify';
-
+const customMarkerImageSrc = '/maker.png'; //컴포넌트 밖으로 이동시켜서 렌더링 시 재정의 방지
 const MainContent = ({ setShowDetail }) => {
   const {
     map,
@@ -37,8 +37,6 @@ const MainContent = ({ setShowDetail }) => {
     setSelectedCity,
   } = useMapStore();
   const { setSelectedPlace } = usePlaceStore();
-
-  const customMarkerImageSrc = '/maker.png';
 
   const handleRegionChange = ({ region, city }) => {
     if (map && region && city) {
@@ -64,23 +62,23 @@ const MainContent = ({ setShowDetail }) => {
     const center = map.getCenter();
     const keyword = selectedCategory === 'CE7' ? '애견 카페' : '애견 숙박';
 
-    const allResults = [];
-    const maxPages = 3; // Kakao API가 지원하는 최대 페이지 수
+    // const allResults = [];
+
     let currentPage = 1;
 
-    const fetchResults = (page) => {
+    const fetchResults = () => {
       ps.keywordSearch(
         keyword,
         (data, status, pagination) => {
           if (status === window.kakao.maps.services.Status.OK) {
-            allResults.push(...data);
+            // allResults.push(...data);
+            console.log(data);
 
-            // 다음 페이지가 있고, 최대 페이지를 넘지 않았으면 추가 요청
-            if (pagination.hasNextPage && page < maxPages) {
-              fetchResults(page + 1);
-            } else {
-              setPlaces(allResults);
-              displayPlaces(allResults);
+            displayPlaces(data);
+            setPlaces(data);
+            setPagination(pagination); //페이지네이션
+            if (pagination) {
+              setTotalPages(pagination.last);
             }
           } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
             toast.error('주변에 해당 시설이 존재하지 않아요.');
@@ -94,7 +92,8 @@ const MainContent = ({ setShowDetail }) => {
             center.getLng(),
           ),
           radius: 20000, // 검색 반경 20km
-          page, // 현재 페이지 번호
+          page: 1,
+          size: 5,
         },
       );
     };
@@ -144,6 +143,20 @@ const MainContent = ({ setShowDetail }) => {
     }
   }, [selectedCategory]);
 
+  const [pagination, setPagination] = useState(null); // 페이지네이션 객체 저장
+  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 저장
+  const [totalPages, setTotalPages] = useState(1); // 총 페이지 수 상태 관리
+
+  const handleGotoPage = (page) => {
+    if (pagination && page > 0 && page <= pagination.last) {
+      markers.forEach((marker) => marker.setMap(null));
+      setMarkers(null);
+      pagination.gotoPage(page); // 페이지네이션 객체의 .gotoPage 메서드 호출
+      setCurrentPage(page);
+    } else {
+      toast.error('잘못된 페이지입니다.');
+    }
+  };
   return (
     <SerchListWrap>
       <SerchTabWrap>
@@ -213,6 +226,39 @@ const MainContent = ({ setShowDetail }) => {
             <PhoneP $isListTitle="true">{place.phone || '정보 없음'}</PhoneP>
           </ListItem>
         ))}
+
+        {/* 페이지 버튼을 동적으로 생성 */}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginTop: '20px',
+          }}
+        >
+          <div>
+            <i
+              className="fa-solid fa-chevron-left"
+              onClick={() => handleGotoPage(1)}
+            ></i>
+          </div>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <div
+              key={index + 1}
+              onClick={() => handleGotoPage(index + 1)}
+              style={{
+                backgroundColor: currentPage === index + 1 ? '#ff6732' : '#ddd',
+              }}
+            >
+              {index + 1}
+            </div>
+          ))}
+          <div>
+            <i
+              className="fa-solid fa-chevron-right"
+              onClick={() => handleGotoPage(totalPages)}
+            ></i>
+          </div>
+        </div>
       </ListWrap>
     </SerchListWrap>
   );
