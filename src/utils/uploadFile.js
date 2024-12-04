@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 export const uploadFile = async (storageName, file) => {
   const { data, uploadError } = await supabase.storage
     .from(storageName)
-    .upload(`${storageName}/${uuidv4()}_${file.name}`, file);
+    .upload(`${storageName}/${uuidv4()}`, file);
 
   if (uploadError) throw uploadError;
 
