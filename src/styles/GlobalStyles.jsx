@@ -48,7 +48,7 @@ const GlobalStyle = createGlobalStyle`
 ::-webkit-scrollbar-corner {
   background: #f1f1f1; /* 코너 색상 */
 }
-select, input {
+select, input, button {
   font-family: 'Pretendard-Regular';
 }
 

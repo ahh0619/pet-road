@@ -482,6 +482,7 @@ export const PaginationDiv = styled.div`
 export const ChevronButton = styled.div`
   cursor: pointer;
   font-size: 15px;
+  padding: 0 15px;
 
   &:hover {
     color: #ff6732;

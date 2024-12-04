@@ -59,6 +59,7 @@ const MainContent = ({ setShowDetail }) => {
   };
 
   const searchByCategory = () => {
+    setCurrentPage(1);
     if (!selectedCategory) {
       toast.error('카테고리를 선택해주세요!');
       return;
@@ -96,7 +97,7 @@ const MainContent = ({ setShowDetail }) => {
           ),
           radius: 20000, // 검색 반경 20km
           page: 1,
-          size: 5,
+          size: 15,
         },
       );
     };
