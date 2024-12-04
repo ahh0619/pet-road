@@ -44,9 +44,8 @@ export const Tab = styled.div`
   padding-bottom: 10px;
   text-align: center;
   cursor: pointer;
-  color: ${(props) => (props.$selectOn === 'true' ? '#fff' : '#595959')};
-  background-color: ${(props) =>
-    props.$selectOn === 'true' ? '#ff6732' : '#fff'};
+  color: ${(props) => (props.$selectOn ? '#fff' : '#595959')};
+  background-color: ${(props) => (props.$selectOn ? '#ff6732' : '#fff')};
   i {
     font-size: 25px;
   }
