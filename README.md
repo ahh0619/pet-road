@@ -1,3 +1,13 @@
+# 🕊 React 7기 아웃소싱 프로젝트
+![스크린샷 2024-12-04 191926](https://github.com/user-attachments/assets/8327b5b3-985b-4099-9414-3ae3111d946d)
+![스크린샷 2024-12-04 191932](https://github.com/user-attachments/assets/535131d9-a596-4988-9ea2-1172cf9e5115)
+![스크린샷 2024-12-04 191938](https://github.com/user-attachments/assets/9e4e6cfa-6a9e-4a5a-b6d1-5ed6fbd4e3ac)
+![스크린샷 2024-12-04 191948](https://github.com/user-attachments/assets/88768929-b714-4c74-9fda-48fc99e24610)
+![스크린샷 2024-12-04 191953](https://github.com/user-attachments/assets/6875210f-ae50-40fe-b447-f21f8c7ad1a4)
+![스크린샷 2024-12-04 192002](https://github.com/user-attachments/assets/c352731b-6413-4c5e-bb5e-7aece0050167)
+
+---
+
 # 🔭[배포용 링크 (예정)]()
 
 ---
