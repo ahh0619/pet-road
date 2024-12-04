@@ -3,10 +3,8 @@ import {
   ListWrap,
   SearchTabLi,
   SearchTabUl,
-  SelectWrap,
   SerchListWrap,
   SerchTabWrap,
-  SearchButton,
   ListLine,
   TitleP,
   ListBookmark,
@@ -14,67 +12,61 @@ import {
   AddressP,
   PhoneP,
 } from '../../styles/KakaoMapStyle';
-import RegionSelector from './RegionSelector';
 import useMapStore from '../../stores/useMapStore';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useBookmark from '../../hooks/bookmark/useBookmark';
 import usePlaceStore from '../../stores/usePlaceStore';
 
 const BookmarkContent = ({ setShowDetail }) => {
-  const {
-    map,
-    markers,
-    setMarkers,
-    infowindow,
-    places,
-    setPlaces,
-    selectedCategory,
-    setSelectedCategory,
-    selectedRegion,
-    setSelectedRegion,
-    selectedCity,
-    setSelectedCity,
-  } = useMapStore();
-
+  const { selectedCategory, setSelectedCategory } = useMapStore();
   const { selectedPlace, setSelectedPlace, isLiked } = usePlaceStore();
-  const { bookmarks, isLoading, error } = useBookmark();
+  const { bookmarks } = useBookmark();
+
+  // 북마크 상태를 단일 상태로 관리
   const [filteredBookmarks, setFilteredBookmarks] = useState(() => {
-    return bookmarks.map((items) => ({
-      ...items,
-      id: items.place_id,
-    }));
+    return bookmarks
+      .map((item) => ({
+        ...item,
+        id: item.place_id,
+      }))
+      .sort((a, b) => new Date(b.create_at) - new Date(a.create_at)); // 정렬 유지
   });
-  const updatedBookmarks = bookmarks.map((items) => ({
-    ...items,
-    id: items.place_id,
-  }));
 
+  // 북마크 변경 시 filteredBookmarks 업데이트
   useEffect(() => {
-    // setFilteredBookmarks(updatedBookmarks);
-    console.log('filteredBookmarks', filteredBookmarks);
-  }, []);
+    setFilteredBookmarks(
+      bookmarks
+        .map((item) => ({
+          ...item,
+          id: item.place_id,
+        }))
+        .sort((a, b) => new Date(b.create_at) - new Date(a.create_at)), // 정렬 유지
+    );
+  }, [bookmarks]);
 
-  const isFirstRender = useRef(true);
-
+  // 좋아요 상태(isLiked) 변경 시 filteredBookmarks 업데이트
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
+    if (selectedPlace) {
+      setFilteredBookmarks((prev) => {
+        if (isLiked) {
+          // 좋아요 추가
+          const isAlreadyInList = prev.some(
+            (place) => place.id === selectedPlace.id,
+          );
+          if (isAlreadyInList) return prev;
+
+          return [...prev, selectedPlace].sort(
+            (a, b) => new Date(b.create_at) - new Date(a.create_at),
+          );
+        } else {
+          // 좋아요 제거
+          return prev
+            .filter((place) => place.id !== selectedPlace.id)
+            .sort((a, b) => new Date(b.create_at) - new Date(a.create_at));
+        }
+      });
     }
-    if (isLiked) {
-      if (selectedPlace) {
-        setFilteredBookmarks(updatedBookmarks);
-        setFilteredBookmarks((prev) => [
-          ...prev.filter((place) => place.id !== selectedPlace.id),
-          selectedPlace,
-        ]);
-      }
-    } else {
-      setFilteredBookmarks((prev) =>
-        prev.filter((place) => place.id !== selectedPlace.id),
-      );
-    }
-  }, [isLiked]);
+  }, [isLiked, selectedPlace]);
 
   return (
     <SerchListWrap>
@@ -98,13 +90,9 @@ const BookmarkContent = ({ setShowDetail }) => {
       </SerchTabWrap>
 
       <ListWrap>
-        {/* 첫 렌더링에서는 updatedBookmarks 사용, 그 이후에는 filteredBookmarks 사용 */}
-        {(filteredBookmarks.length > 0
-          ? filteredBookmarks
-          : updatedBookmarks
-        ).map((place, index) => (
+        {filteredBookmarks.map((place) => (
           <ListItem
-            key={index}
+            key={place.id}
             onClick={() => {
               setSelectedPlace(place);
               setShowDetail(true);
