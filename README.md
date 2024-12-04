@@ -57,7 +57,6 @@
 
 4. **React Router DOM 라우팅**
      - `useNavigate`
-     - `Navigate 컴포넌트`
      - `useLocation`
      - `useParams`
      - `Link 태그`
