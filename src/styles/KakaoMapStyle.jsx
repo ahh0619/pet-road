@@ -450,8 +450,8 @@ export const SearchButton = styled.button`
 export const UserProfileDiv = styled.div`
   margin: 0 auto;
   text-align: center;
-  width: 34px;
-  height: 34px;
+  width: 40px;
+  height: 40px;
   background-image: url(${(props) => props.$backgroundUrl});
   background-size: cover;
   background-position: center;

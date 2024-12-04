@@ -33,8 +33,6 @@ const MyPageComponent = () => {
   const handleSignButtonClick = () => {
     if (authUser) {
       handleProfileUpdate();
-      // setNewUserName('');
-      // setNewProfileImage('');
     } else {
       navigate('/login');
     }
