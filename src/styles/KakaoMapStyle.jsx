@@ -152,7 +152,7 @@ export const SearchTabUl = styled.ul`
   font-weight: bold;
   justify-content: center;
   gap: 10px;
-  margin-top: 20px;
+  margin-top: ${(props) => (props.$isActive === 'true' ? '0px' : '20px')};
 `;
 
 export const SearchTabLi = styled.li`

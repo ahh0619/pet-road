@@ -13,26 +13,46 @@ import {
   PhoneP,
 } from '../../styles/KakaoMapStyle';
 import useMapStore from '../../stores/useMapStore';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import useBookmark from '../../hooks/bookmark/useBookmark';
 import usePlaceStore from '../../stores/usePlaceStore';
 
 const BookmarkContent = ({ setShowDetail }) => {
-  const { selectedCategory, setSelectedCategory } = useMapStore();
+  const [selectedCategory, setSelectedCategory] = useState('카페');
   const { selectedPlace, setSelectedPlace, isLiked } = usePlaceStore();
   const { bookmarks } = useBookmark();
 
-  // 북마크 상태를 단일 상태로 관리
   const [filteredBookmarks, setFilteredBookmarks] = useState(() => {
     return bookmarks
       .map((item) => ({
         ...item,
         id: item.place_id,
       }))
-      .sort((a, b) => new Date(b.create_at) - new Date(a.create_at)); // 정렬 유지
+      .sort((a, b) => new Date(b.create_at) - new Date(a.create_at));
   });
 
-  // 북마크 변경 시 filteredBookmarks 업데이트
+  const [listWrapHeight, setListWrapHeight] = useState(0);
+
+  const serchTabWrapRef = useRef(null);
+
+  useEffect(() => {
+    const updateListWrapHeight = () => {
+      const tabHeight = serchTabWrapRef.current
+        ? serchTabWrapRef.current.clientHeight
+        : 0;
+      const windowHeight = window.innerHeight;
+      setListWrapHeight(windowHeight - tabHeight);
+    };
+
+    window.addEventListener('resize', updateListWrapHeight);
+
+    updateListWrapHeight();
+
+    return () => {
+      window.removeEventListener('resize', updateListWrapHeight);
+    };
+  }, []);
+
   useEffect(() => {
     setFilteredBookmarks(
       bookmarks
@@ -40,16 +60,14 @@ const BookmarkContent = ({ setShowDetail }) => {
           ...item,
           id: item.place_id,
         }))
-        .sort((a, b) => new Date(b.create_at) - new Date(a.create_at)), // 정렬 유지
+        .sort((a, b) => new Date(b.create_at) - new Date(a.create_at)),
     );
   }, [bookmarks]);
 
-  // 좋아요 상태(isLiked) 변경 시 filteredBookmarks 업데이트
   useEffect(() => {
     if (selectedPlace) {
       setFilteredBookmarks((prev) => {
         if (isLiked) {
-          // 좋아요 추가
           const isAlreadyInList = prev.some(
             (place) => place.id === selectedPlace.id,
           );
@@ -59,7 +77,6 @@ const BookmarkContent = ({ setShowDetail }) => {
             (a, b) => new Date(b.create_at) - new Date(a.create_at),
           );
         } else {
-          // 좋아요 제거
           return prev
             .filter((place) => place.id !== selectedPlace.id)
             .sort((a, b) => new Date(b.create_at) - new Date(a.create_at));
@@ -68,20 +85,24 @@ const BookmarkContent = ({ setShowDetail }) => {
     }
   }, [isLiked, selectedPlace]);
 
+  const tabChange = (category) => {
+    setSelectedCategory(category);
+  };
+
   return (
     <SerchListWrap>
-      <SerchTabWrap>
-        <SearchTabUl>
+      <SerchTabWrap ref={serchTabWrapRef}>
+        <SearchTabUl $isActive="true">
           <SearchTabLi
-            $isActive={selectedCategory === 'CE7' ? 'true' : 'false'}
-            onClick={() => setSelectedCategory('CE7')}
+            $isActive={selectedCategory === '카페' ? 'true' : 'false'}
+            onClick={() => tabChange('카페')}
           >
             <i className="fa-solid fa-mug-saucer"></i>
             <p>카페</p>
           </SearchTabLi>
           <SearchTabLi
-            $isActive={selectedCategory === 'AD5' ? 'true' : 'false'}
-            onClick={() => setSelectedCategory('AD5')}
+            $isActive={selectedCategory === '숙박' ? 'true' : 'false'}
+            onClick={() => tabChange('숙박')}
           >
             <i className="fa-solid fa-hotel"></i>
             <p>펜션</p>
@@ -89,39 +110,41 @@ const BookmarkContent = ({ setShowDetail }) => {
         </SearchTabUl>
       </SerchTabWrap>
 
-      <ListWrap>
-        {filteredBookmarks.map((place) => (
-          <ListItem
-            key={place.id}
-            onClick={() => {
-              setSelectedPlace(place);
-              setShowDetail(true);
-            }}
-          >
-            <ListLine>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <i
-                  className={`fa-solid ${
-                    place.category_name?.includes('카페')
-                      ? 'fa-mug-saucer'
-                      : 'fa-hotel'
-                  }`}
-                  style={{ color: '#ff6732', marginRight: '8px' }}
-                ></i>
-                <TitleP $isListTitle="true">{place.place_name}</TitleP>
-              </div>
-              <ListBookmark>
-                <HeartIcon className="fa-regular fa-heart" />
-              </ListBookmark>
-            </ListLine>
-            <AddressP $isListTitle="true">
-              {place.road_address_name || place.address_name}
-            </AddressP>
-            <PhoneP $isListTitle="true">
-              {place.phone_number || '정보 없음'}
-            </PhoneP>
-          </ListItem>
-        ))}
+      <ListWrap style={{ height: `${listWrapHeight}px` }}>
+        {filteredBookmarks
+          .filter((place) => place.category_group_name === selectedCategory)
+          .map((place) => (
+            <ListItem
+              key={place.id}
+              onClick={() => {
+                setSelectedPlace(place);
+                setShowDetail(true);
+              }}
+            >
+              <ListLine>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <i
+                    className={`fa-solid ${
+                      place.category_name?.includes('카페')
+                        ? 'fa-mug-saucer'
+                        : 'fa-hotel'
+                    }`}
+                    style={{ color: '#ff6732', marginRight: '8px' }}
+                  ></i>
+                  <TitleP $isListTitle="true">{place.place_name}</TitleP>
+                </div>
+                <ListBookmark>
+                  <HeartIcon className="fa-regular fa-heart" />
+                </ListBookmark>
+              </ListLine>
+              <AddressP $isListTitle="true">
+                {place.road_address_name || place.address_name}
+              </AddressP>
+              <PhoneP $isListTitle="true">
+                {place.phone_number || '정보 없음'}
+              </PhoneP>
+            </ListItem>
+          ))}
       </ListWrap>
     </SerchListWrap>
   );
