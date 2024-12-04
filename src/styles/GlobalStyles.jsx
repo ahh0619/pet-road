@@ -2,9 +2,15 @@ import { createGlobalStyle } from 'styled-components';
 import 'reset-css'; // reset.css 가져오기
 
 const GlobalStyle = createGlobalStyle`
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
   body {
     min-width: 1024px;
-    font-family: Arial, sans-serif;
+    font-family: 'Pretendard-Regular';
     line-height: 1.6;
     background-color: #FFAD32;
     height: 100%;
@@ -41,6 +47,9 @@ const GlobalStyle = createGlobalStyle`
 /* 스크롤바 코너 (양쪽 스크롤이 만나는 부분) */
 ::-webkit-scrollbar-corner {
   background: #f1f1f1; /* 코너 색상 */
+}
+select, input {
+  font-family: 'Pretendard-Regular';
 }
 
 `;
