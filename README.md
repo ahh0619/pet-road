@@ -96,5 +96,6 @@
 ![디테일페이지](https://github.com/user-attachments/assets/ed57157e-cfdf-4830-805b-ba2109f98ad1)
 
 ### 7. 북마크 추가/제거
+![북마크 추가제거](https://github.com/user-attachments/assets/b5543159-24cc-4c4e-b1a6-a2b56d5e74ab)
 
 ---
