@@ -13,6 +13,9 @@ import {
   HeartIcon,
   AddressP,
   PhoneP,
+  PaginationDiv,
+  ChevronButton,
+  PageButton,
 } from '../../styles/KakaoMapStyle';
 import RegionSelector from './RegionSelector';
 import useMapStore from '../../stores/useMapStore';
@@ -42,6 +45,9 @@ const MainContent = ({ setShowDetail }) => {
     if (map && region && city) {
       const geocoder = new window.kakao.maps.services.Geocoder();
       const address = `${region} ${city}`;
+      setPlaces([]);
+      setCurrentPage(1);
+      setTotalPages(1);
 
       geocoder.addressSearch(address, (result, status) => {
         if (status === window.kakao.maps.services.Status.OK) {
@@ -104,8 +110,10 @@ const MainContent = ({ setShowDetail }) => {
 
   const displayPlaces = (places) => {
     const bounds = new window.kakao.maps.LatLngBounds();
-    markers.forEach((marker) => marker.setMap(null));
-    setMarkers([]);
+    if (markers.length !== 0) {
+      markers.forEach((marker) => marker.setMap(null));
+      setMarkers([]);
+    }
 
     const newMarkers = places.map((place) => {
       const position = new window.kakao.maps.LatLng(place.y, place.x);
@@ -149,14 +157,17 @@ const MainContent = ({ setShowDetail }) => {
 
   const handleGotoPage = (page) => {
     if (pagination && page > 0 && page <= pagination.last) {
-      markers.forEach((marker) => marker.setMap(null));
-      setMarkers(null);
+      if (markers.length !== 0) {
+        markers.forEach((marker) => marker.setMap(null));
+        setMarkers([]);
+      }
       pagination.gotoPage(page); // 페이지네이션 객체의 .gotoPage 메서드 호출
       setCurrentPage(page);
     } else {
       toast.error('잘못된 페이지입니다.');
     }
   };
+
   return (
     <SerchListWrap>
       <SerchTabWrap>
@@ -228,37 +239,25 @@ const MainContent = ({ setShowDetail }) => {
         ))}
 
         {/* 페이지 버튼을 동적으로 생성 */}
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            marginTop: '20px',
-          }}
-        >
-          <div>
-            <i
-              className="fa-solid fa-chevron-left"
-              onClick={() => handleGotoPage(1)}
-            ></i>
-          </div>
-          {Array.from({ length: totalPages }, (_, index) => (
-            <div
-              key={index + 1}
-              onClick={() => handleGotoPage(index + 1)}
-              style={{
-                backgroundColor: currentPage === index + 1 ? '#ff6732' : '#ddd',
-              }}
-            >
-              {index + 1}
-            </div>
-          ))}
-          <div>
-            <i
-              className="fa-solid fa-chevron-right"
-              onClick={() => handleGotoPage(totalPages)}
-            ></i>
-          </div>
-        </div>
+        {places.length !== 0 && (
+          <PaginationDiv>
+            <ChevronButton onClick={() => handleGotoPage(1)}>
+              <i className="fa-solid fa-chevron-left"></i>
+            </ChevronButton>
+            {Array.from({ length: totalPages }, (_, index) => (
+              <PageButton
+                key={index + 1}
+                onClick={() => handleGotoPage(index + 1)}
+                isActive={currentPage === index + 1}
+              >
+                {index + 1}
+              </PageButton>
+            ))}
+            <ChevronButton onClick={() => handleGotoPage(totalPages)}>
+              <i className="fa-solid fa-chevron-right"></i>
+            </ChevronButton>
+          </PaginationDiv>
+        )}
       </ListWrap>
     </SerchListWrap>
   );
