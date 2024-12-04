@@ -196,7 +196,7 @@ export const ListWrap = styled.div`
   overflow-y: auto;
   text-align: left;
   line-height: 1.5;
-  height: calc(100vh - 230px);
+  height: calc(100vh - 250px);
 `;
 
 export const ListItem = styled.div`
