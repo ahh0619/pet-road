@@ -38,14 +38,22 @@ const BookmarkContent = ({ setShowDetail }) => {
 
   const { selectedPlace, setSelectedPlace, isLiked } = usePlaceStore();
   const { bookmarks, isLoading, error } = useBookmark();
-
-  const [filteredBookmarks, setFilteredBookmarks] = useState([]);
-
+  const [filteredBookmarks, setFilteredBookmarks] = useState(() => {
+    return bookmarks.map((items) => ({
+      ...items,
+      id: items.place_id,
+    }));
+  });
   const updatedBookmarks = bookmarks.map((items) => ({
     ...items,
     id: items.place_id,
   }));
-  console.log('first', updatedBookmarks);
+
+  useEffect(() => {
+    // setFilteredBookmarks(updatedBookmarks);
+    console.log('filteredBookmarks', filteredBookmarks);
+  }, []);
+
   const isFirstRender = useRef(true);
 
   useEffect(() => {
@@ -53,9 +61,9 @@ const BookmarkContent = ({ setShowDetail }) => {
       isFirstRender.current = false;
       return;
     }
-    setFilteredBookmarks(updatedBookmarks);
     if (isLiked) {
       if (selectedPlace) {
+        setFilteredBookmarks(updatedBookmarks);
         setFilteredBookmarks((prev) => [
           ...prev.filter((place) => place.id !== selectedPlace.id),
           selectedPlace,
