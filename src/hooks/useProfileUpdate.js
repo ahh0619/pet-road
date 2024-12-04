@@ -34,6 +34,8 @@ const useProfileUpdate = () => {
         userName: data[0].user_name, // 'user_name'을 'userName'으로 변경
         profileImage: data[0].profile_image, // 'profile_image'를 'profileImage'로 변경
       });
+      setNewUserName('');
+      setNewProfileImage('');
     } catch (error) {
       console.error('프로필 업데이트 실패:', error); // 오류 처리
     }
