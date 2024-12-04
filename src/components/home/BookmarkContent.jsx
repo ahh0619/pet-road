@@ -44,6 +44,7 @@ const BookmarkContent = ({ setShowDetail }) => {
       id: items.place_id,
     }));
   });
+  console.log('filteredBookmarks123', filteredBookmarks);
   const updatedBookmarks = bookmarks.map((items) => ({
     ...items,
     id: items.place_id,
@@ -52,7 +53,7 @@ const BookmarkContent = ({ setShowDetail }) => {
   useEffect(() => {
     // setFilteredBookmarks(updatedBookmarks);
     console.log('filteredBookmarks', filteredBookmarks);
-  }, []);
+  }, [filteredBookmarks]);
 
   const isFirstRender = useRef(true);
 
@@ -63,7 +64,7 @@ const BookmarkContent = ({ setShowDetail }) => {
     }
     if (isLiked) {
       if (selectedPlace) {
-        setFilteredBookmarks(updatedBookmarks);
+        // setFilteredBookmarks(updatedBookmarks);
         setFilteredBookmarks((prev) => [
           ...prev.filter((place) => place.id !== selectedPlace.id),
           selectedPlace,
