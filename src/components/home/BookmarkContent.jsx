@@ -16,10 +16,11 @@ import {
 } from '../../styles/KakaoMapStyle';
 import RegionSelector from './RegionSelector';
 import useMapStore from '../../stores/useMapStore';
-import { createInfoWindowContent } from '../../utils/infoWindowUitl';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import useBookmark from '../../hooks/bookmark/useBookmark';
+import usePlaceStore from '../../stores/usePlaceStore';
 
-const BookmarkContent = ({ setShowDetail, setSelectedPlaceId }) => {
+const BookmarkContent = ({ setShowDetail }) => {
   const {
     map,
     markers,
@@ -34,6 +35,39 @@ const BookmarkContent = ({ setShowDetail, setSelectedPlaceId }) => {
     selectedCity,
     setSelectedCity,
   } = useMapStore();
+
+  const { selectedPlace, setSelectedPlace, isLiked } = usePlaceStore();
+  const { bookmarks, isLoading, error } = useBookmark();
+
+  const [filteredBookmarks, setFilteredBookmarks] = useState([]);
+
+  const updatedBookmarks = bookmarks.map((items) => ({
+    ...items,
+    id: items.place_id,
+  }));
+  console.log('first', updatedBookmarks);
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    setFilteredBookmarks(updatedBookmarks);
+    if (isLiked) {
+      if (selectedPlace) {
+        setFilteredBookmarks((prev) => [
+          ...prev.filter((place) => place.id !== selectedPlace.id),
+          selectedPlace,
+        ]);
+      }
+    } else {
+      setFilteredBookmarks((prev) =>
+        prev.filter((place) => place.id !== selectedPlace.id),
+      );
+    }
+  }, [isLiked]);
+
   return (
     <SerchListWrap>
       <SerchTabWrap>
@@ -56,17 +90,15 @@ const BookmarkContent = ({ setShowDetail, setSelectedPlaceId }) => {
       </SerchTabWrap>
 
       <ListWrap>
-        {places.map((place, index) => (
+        {/* 첫 렌더링에서는 updatedBookmarks 사용, 그 이후에는 filteredBookmarks 사용 */}
+        {(filteredBookmarks.length > 0
+          ? filteredBookmarks
+          : updatedBookmarks
+        ).map((place, index) => (
           <ListItem
             key={index}
             onClick={() => {
-              const marker = markers[index];
-              if (marker) {
-                infowindow.setContent(createInfoWindowContent(place));
-                infowindow.open(map, marker);
-                map.panTo(marker.getPosition());
-              }
-              setSelectedPlaceId(place.id);
+              setSelectedPlace(place);
               setShowDetail(true);
             }}
           >
@@ -89,7 +121,9 @@ const BookmarkContent = ({ setShowDetail, setSelectedPlaceId }) => {
             <AddressP $isListTitle="true">
               {place.road_address_name || place.address_name}
             </AddressP>
-            <PhoneP $isListTitle="true">{place.phone || '정보 없음'}</PhoneP>
+            <PhoneP $isListTitle="true">
+              {place.phone_number || '정보 없음'}
+            </PhoneP>
           </ListItem>
         ))}
       </ListWrap>

@@ -9,11 +9,6 @@ export const fetchBookmarks = async (authUser) => {
     if (error) {
       throw Error(error.message);
     }
-    // const fetchedBookmarks = data[0];
-    // if (fetchedBookmarks) {
-    // } else {
-    //     alert('사용자를 찾을 수 없습니다.');
-    // }
     return data;
   } catch (error) {
     console.error('북마크 정보 가져오기 실패:', error);
