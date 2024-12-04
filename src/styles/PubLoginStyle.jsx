@@ -69,6 +69,7 @@ export const Hr = styled.hr`
 export const Input = styled.input`
   border: 1px solid #a9a9a9;
   border-radius: 5px;
+  margin-top: 10px;
   width: 100%;
   box-sizing: border-box;
   padding: ${(props) => (props.$isMyPage === 'true' ? '10px' : '15px')};

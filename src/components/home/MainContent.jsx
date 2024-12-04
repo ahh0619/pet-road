@@ -38,6 +38,8 @@ const MainContent = ({ setShowDetail }) => {
   } = useMapStore();
   const { setSelectedPlace } = usePlaceStore();
 
+  const customMarkerImageSrc = '/maker.png';
+
   const handleRegionChange = ({ region, city }) => {
     if (map && region && city) {
       const geocoder = new window.kakao.maps.services.Geocoder();
@@ -108,7 +110,18 @@ const MainContent = ({ setShowDetail }) => {
 
     const newMarkers = places.map((place) => {
       const position = new window.kakao.maps.LatLng(place.y, place.x);
-      const marker = new window.kakao.maps.Marker({ position });
+
+      // 마커 이미지 설정
+      const imageSize = new window.kakao.maps.Size(40, 40); // 마커 크기
+      const markerImage = new window.kakao.maps.MarkerImage(
+        customMarkerImageSrc,
+        imageSize,
+      );
+
+      const marker = new window.kakao.maps.Marker({
+        position,
+        image: markerImage, // 커스텀 마커 이미지 설정
+      });
 
       marker.setMap(map);
       bounds.extend(position);
