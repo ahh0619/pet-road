@@ -16,24 +16,30 @@ const SideBarComponent = ({
   setShowMain,
   showBookmark,
   setShowBookmark,
+  setShowDetail
 }) => {
   const [isMyPageVisible, setIsMyPageVisible] = useState(false);
   const authUser = useAuthUserStore((state) => state.authUser);
+
   const handleHomeIcon = () => {
     if (showMain) {
+      setShowDetail(false);
       setShowMain(false);
     } else {
       setShowMain(true);
       setShowBookmark(false);
+      setShowDetail(false);
     }
   };
 
   const handleBookmarkIcon = () => {
     if (showBookmark) {
+      setShowDetail(false);
       setShowBookmark(false);
     } else {
       setShowBookmark(true);
       setShowMain(false);
+      setShowDetail(false);
     }
   };
 
@@ -44,12 +50,12 @@ const SideBarComponent = ({
       </SideBarLogoWrap>
       <Hr $bottomGap="false" />
 
-      <Tab $selectOn="true" onClick={handleHomeIcon}>
+      <Tab $selectOn={showMain} onClick={handleHomeIcon}>
         <i className="fa-solid fa-location-dot"></i>
         <br />
         <p>지도 홈</p>
       </Tab>
-      <Tab onClick={handleBookmarkIcon}>
+      <Tab $selectOn={showBookmark} onClick={handleBookmarkIcon}>
         <i className="fa-solid fa-heart"></i>
         <br />
         <p>북마크</p>

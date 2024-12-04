@@ -15,6 +15,7 @@ const Home = () => {
     <>
       {showMain && <MainContent setShowDetail={setShowDetail} />}
       {showBookmark && <BookmarkContent setShowDetail={setShowDetail} />}
+      {console.log('home = showDetail', showDetail)}
       {(showMain || showBookmark) && showDetail && (
         <DetailComponent setShowDetail={setShowDetail} />
       )}
@@ -23,8 +24,8 @@ const Home = () => {
         setShowMain={setShowMain}
         showBookmark={showBookmark}
         setShowBookmark={setShowBookmark}
+        setShowDetail={setShowDetail}
       />
-
       <KakaoMap />
     </>
   );
