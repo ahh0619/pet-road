@@ -5,8 +5,7 @@ import { toast } from 'react-toastify';
 import usePlaceStore from '../../stores/usePlaceStore';
 import { useQueryClient } from '@tanstack/react-query';
 
-function LikeComponent() {
-  //   const [isLiked, setIsLiked] = useState(false);
+function LikeComponent({ setShowDetail }) {
   const { id } = useAuthUserStore((state) => state.authUser) || '';
   const { selectedPlace, isLiked, setIsLiked } = usePlaceStore();
   const queryClient = useQueryClient();
@@ -36,7 +35,6 @@ function LikeComponent() {
       toast.error('로그인 후 이용해 주세요.');
       return;
     }
-
     if (isLiked) {
       const { error } = await supabase
         .from('bookmarks')
@@ -47,6 +45,7 @@ function LikeComponent() {
       if (!error) {
         setIsLiked(false);
         queryClient.invalidateQueries(['bookmarks', id]);
+        setShowDetail(false); // 디테일 페이지 닫기
       }
     } else {
       const { error } = await supabase.from('bookmarks').insert({

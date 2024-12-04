@@ -76,8 +76,6 @@ const MainContent = ({ setShowDetail }) => {
         keyword,
         (data, status, pagination) => {
           if (status === window.kakao.maps.services.Status.OK) {
-            console.log(data);
-
             displayPlaces(data);
             setPlaces(data);
             setPagination(pagination); //페이지네이션
@@ -134,6 +132,8 @@ const MainContent = ({ setShowDetail }) => {
       window.kakao.maps.event.addListener(marker, 'click', () => {
         infowindow.setContent(createInfoWindowContent(place));
         infowindow.open(map, marker);
+        setSelectedPlace(place); // 선택된 장소 설정
+        setShowDetail(true); // 디테일 페이지 열기
       });
 
       return marker;

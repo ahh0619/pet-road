@@ -12,7 +12,6 @@ import {
   AddressP,
   PhoneP,
 } from '../../styles/KakaoMapStyle';
-import useMapStore from '../../stores/useMapStore';
 import { useEffect, useState, useRef } from 'react';
 import useBookmark from '../../hooks/bookmark/useBookmark';
 import usePlaceStore from '../../stores/usePlaceStore';

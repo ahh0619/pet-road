@@ -203,7 +203,7 @@ export const ListItem = styled.div`
   border-top: 1px solid #d2d2d2;
   padding: 15px;
   box-sizing: border-box;
-  cuscursor: pointer;
+  cursor: pointer;
 `;
 
 export const ListLine = styled.div`

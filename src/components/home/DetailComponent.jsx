@@ -25,7 +25,7 @@ const DetailComponent = ({ setShowDetail }) => {
       </CloseBtn>
       <ControlMenu>
         {/*좋아요 버튼*/}
-        <LikeComponent />
+        <LikeComponent setShowDetail={setShowDetail} />
       </ControlMenu>
     </DetailWrap>
   );
