@@ -468,3 +468,35 @@ export const LogoutBtn = styled.button`
     color: #777;
   }
 `;
+
+export const PaginationDiv = styled.div`
+  margin: 0 auto;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+`;
+
+export const ChevronButton = styled.div`
+  cursor: pointer;
+  font-size: 15px;
+
+  &:hover {
+    color: #ff6732;
+  }
+`;
+
+export const PageButton = styled.div`
+  cursor: pointer;
+  background-color: ${({ isActive }) => (isActive ? '#FF900F' : '#fff')};
+  padding: 3px 8px;
+  margin: 0 3px;
+  border-radius: 4px;
+
+  &:hover {
+    background-color: #ff6732;
+    color: white;
+  }
+`;
