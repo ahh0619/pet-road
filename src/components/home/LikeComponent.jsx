@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import useAuthUserStore from '../../stores/useAuthUserStore';
 import { supabase } from '../../api/supabase/supabase';
 import { toast } from 'react-toastify';
 import usePlaceStore from '../../stores/usePlaceStore';
+import { useQueryClient } from '@tanstack/react-query';
 
-function LikeComponent({ selectedPlaceId }) {
+function LikeComponent() {
   //   const [isLiked, setIsLiked] = useState(false);
   const { id } = useAuthUserStore((state) => state.authUser) || '';
-  const { selectedPlace, setSelectedPlace, isLiked, setIsLiked } =
-    usePlaceStore();
+  const { selectedPlace, isLiked, setIsLiked } = usePlaceStore();
+  const queryClient = useQueryClient();
 
   /* 좋아요 정보 가져오기 */
   useEffect(() => {
-    if (id) {
+    if (selectedPlace && id) {
       const fetchLike = async () => {
         const { data, error } = await supabase
           .from('bookmarks')
@@ -20,29 +21,33 @@ function LikeComponent({ selectedPlaceId }) {
           .eq('user_id', id)
           .eq('place_id', selectedPlace.id);
 
-        if (error) window.alert('오류가 발생했습니다.', error);
-        else setIsLiked(data.length > 0);
+        if (error) {
+          console.error('Error fetching like status:', error);
+        } else {
+          setIsLiked(data.length > 0);
+        }
       };
       fetchLike();
-    } else {
-      setIsLiked(false);
     }
-  }, [selectedPlace.id]);
+  }, [selectedPlace, id]);
 
   const handleLikeBtn = async () => {
     if (!id) {
       toast.error('로그인 후 이용해 주세요.');
       return;
     }
-    /* 좋아요 버튼 눌렀을 때 로직 처리 */
+
     if (isLiked) {
       const { error } = await supabase
         .from('bookmarks')
         .delete()
         .eq('user_id', id)
         .eq('place_id', selectedPlace.id);
-      if (error) console.log(error);
-      setIsLiked(false);
+
+      if (!error) {
+        setIsLiked(false);
+        queryClient.invalidateQueries(['bookmarks', id]);
+      }
     } else {
       const { error } = await supabase.from('bookmarks').insert({
         user_id: id,
@@ -56,10 +61,14 @@ function LikeComponent({ selectedPlaceId }) {
         location_x: selectedPlace.x,
         location_y: selectedPlace.y,
       });
-      if (error) console.log(error);
-      setIsLiked(true);
+
+      if (!error) {
+        setIsLiked(true);
+        queryClient.invalidateQueries(['bookmarks', id]);
+      }
     }
   };
+
   return (
     <img
       src={isLiked ? 'heart-on.png' : 'heart-off.png'}
