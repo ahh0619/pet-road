@@ -20,7 +20,7 @@ const useAuth = () => {
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
     clearAuthUser();
-    navigate('/');
+    window.location.reload(true);
   };
 
   const signUpMutation = useSignUp();
