@@ -59,6 +59,7 @@ const MainContent = ({ setShowDetail }) => {
   };
 
   const searchByCategory = () => {
+    setCurrentPage(1);
     if (!selectedCategory) {
       toast.error('카테고리를 선택해주세요!');
       return;
@@ -68,8 +69,6 @@ const MainContent = ({ setShowDetail }) => {
     const center = map.getCenter();
     const keyword = selectedCategory === 'CE7' ? '애견 카페' : '애견 숙박';
 
-    // const allResults = [];
-
     let currentPage = 1;
 
     const fetchResults = () => {
@@ -77,7 +76,6 @@ const MainContent = ({ setShowDetail }) => {
         keyword,
         (data, status, pagination) => {
           if (status === window.kakao.maps.services.Status.OK) {
-            // allResults.push(...data);
             console.log(data);
 
             displayPlaces(data);
@@ -99,7 +97,7 @@ const MainContent = ({ setShowDetail }) => {
           ),
           radius: 20000, // 검색 반경 20km
           page: 1,
-          size: 5,
+          size: 15,
         },
       );
     };

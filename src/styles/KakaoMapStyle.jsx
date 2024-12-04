@@ -153,7 +153,7 @@ export const SearchTabUl = styled.ul`
   font-weight: bold;
   justify-content: center;
   gap: 10px;
-  margin-top: 20px;
+  margin-top: ${(props) => (props.$isActive === 'true' ? '0px' : '20px')};
 `;
 
 export const SearchTabLi = styled.li`
@@ -482,6 +482,7 @@ export const PaginationDiv = styled.div`
 export const ChevronButton = styled.div`
   cursor: pointer;
   font-size: 15px;
+  padding: 0 15px;
 
   &:hover {
     color: #ff6732;

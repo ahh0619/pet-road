@@ -5,7 +5,8 @@ export const fetchBookmarks = async (authUser) => {
     const { data, error } = await supabase
       .from('bookmarks')
       .select()
-      .eq('user_id', authUser.id);
+      .eq('user_id', authUser.id)
+      .order('create_at', { ascending: false });
     if (error) {
       throw Error(error.message);
     }
